@@ -1,0 +1,55 @@
+{
+  "name": "remark-license",
+  "version": "0.0.0",
+  "description": "Add a license section to your README",
+  "license": "MIT",
+  "keywords": [
+    "remark",
+    "text",
+    "markdown",
+    "plain",
+    "text",
+    "license",
+    "spdx",
+    "readme"
+  ],
+  "repository": "wooorm/remark-license",
+  "author": {
+    "name": "Titus Wormer",
+    "email": "tituswormer@gmail.com",
+    "url": "wooorm.com"
+  },
+  "files": [
+    "index.js"
+  ],
+  "dependencies": {
+    "mdast-util-heading-range": "^1.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^12.0.1",
+    "eslint": "^1.0.0",
+    "esmangle": "^1.0.1",
+    "istanbul": "^0.4.0",
+    "jscs": "^2.0.0",
+    "jscs-jsdoc": "^1.0.0",
+    "remark-comment-config": "^2.0.0",
+    "remark-github": "^2.0.0",
+    "remark-lint": "^2.0.0",
+    "remark-slug": "^3.0.0",
+    "remark-usage": "^2.0.1",
+    "remark-validate-links": "^2.0.0",
+    "tape": "^4.0.0"
+  },
+  "scripts": {
+    "build-md": "remark . --quiet",
+    "build-bundle": "browserify --no-builtins index.js -s remarkLicense > remark-license.js",
+    "build-mangle": "esmangle remark-license.js > remark-license.min.js",
+    "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
+    "lint-api": "eslint .",
+    "lint-style": "jscs --reporter inline .",
+    "lint": "npm run lint-api && npm run lint-style",
+    "test-api": "node test/index.js",
+    "test-coverage": "istanbul cover test/index.js",
+    "test": "npm run build && npm run lint && npm run test-coverage"
+  }
+}

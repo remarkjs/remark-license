@@ -1,0 +1,15 @@
+{
+  "output": true,
+  "plugins": [
+    "comment-config",
+    "lint",
+    "github",
+    "slug",
+    "usage",
+    "./",
+    "validate-links"
+  ],
+  "settings": {
+    "bullet": "*"
+  }
+}

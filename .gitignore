@@ -1,0 +1,7 @@
+.DS_Store
+*.log
+components/
+coverage/
+node_modules/
+remark-license.js
+remark-license.min.js

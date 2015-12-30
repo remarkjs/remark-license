@@ -1,0 +1,6 @@
+coverage/
+components/
+test/fixtures/
+example.js
+remark-license.js
+remark-license.min.js

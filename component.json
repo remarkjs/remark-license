@@ -1,0 +1,23 @@
+{
+  "name": "remark-license",
+  "version": "0.0.0",
+  "description": "Add a license section to your README",
+  "license": "MIT",
+  "keywords": [
+    "remark",
+    "text",
+    "markdown",
+    "plain",
+    "text",
+    "license",
+    "spdx",
+    "readme"
+  ],
+  "repository": "wooorm/remark-license",
+  "dependencies": {
+    "wooorm/mdast-util-heading-range": "^1.0.0"
+  },
+  "scripts": [
+    "index.js"
+  ]
+}

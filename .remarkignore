@@ -1,0 +1,2 @@
+# Make sure the fixtures do not get overwritten.
+test/
