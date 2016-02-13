@@ -1,5 +1,4 @@
 coverage/
-components/
 test/fixtures/
 example.js
 remark-license.js

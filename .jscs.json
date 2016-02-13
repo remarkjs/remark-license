@@ -1,7 +1,6 @@
 {
   "excludeFiles": [
     "coverage/",
-    "components/",
     "node_modules/",
     "test/fixtures/",
     "example.js",

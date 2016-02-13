@@ -10,9 +10,8 @@ Add a [license](#license) section to a README.
 npm install remark-license
 ```
 
-**remark-license** is also available for [duo](http://duojs.org/#getting-started),
-and as an AMD, CommonJS, and globals module, [uncompressed and
-compressed](https://github.com/wooorm/remark-license/releases).
+**remark-license** is also available as an AMD, CommonJS, and globals
+module, [uncompressed and compressed](https://github.com/wooorm/remark-license/releases).
 
 ## Usage
 
