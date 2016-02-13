@@ -1,4 +1,4 @@
-# remark-license [![Build Status](https://img.shields.io/travis/wooorm/remark-license.svg)](https://travis-ci.org/wooorm/remark-license) [![Coverage Status](https://img.shields.io/codecov/c/github/wooorm/remark-license.svg)](https://codecov.io/github/wooorm/remark-license)
+# remark-license [![Build Status](https://img.shields.io/travis/wooorm/remark-license.svg)](https://travis-ci.org/wooorm/remark-license) [![Coverage Status](https://img.shields.io/codecov/c/github/wooorm/remark-license.svg)](https://codecov.io/github/wooorm/remark-license) [![remark](https://img.shields.io/badge/remark-4.0.0-brightgreen.svg)](https://github.com/wooorm/remark)
 
 Add a [license](#license) section to a README.
 

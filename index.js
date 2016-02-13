@@ -131,7 +131,7 @@ function attacher(remark, options) {
             } else {
                 parent = {
                     'type': 'link',
-                    'href': settings.file,
+                    'url': settings.file,
                     'children': []
                 };
 
@@ -162,7 +162,7 @@ function attacher(remark, options) {
 
                 parent = {
                     'type': 'link',
-                    'href': url,
+                    'url': url,
                     'children': []
                 };
 
