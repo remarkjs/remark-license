@@ -23,7 +23,7 @@
     "index.js"
   ],
   "dependencies": {
-    "mdast-util-heading-range": "^1.0.0"
+    "mdast-util-heading-range": "^2.0.0"
   },
   "devDependencies": {
     "browserify": "^12.0.1",

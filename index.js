@@ -114,67 +114,69 @@ function attacher(remark, options) {
         );
     }
 
-    remark.use(heading(/^licen[cs]e$/i, function (start, nodes, end) {
-        var children = [];
-        var url;
-        var node;
-        var parent;
+    return function (tree) {
+        heading(tree, /^licen[cs]e$/i, function (start, nodes, end) {
+            var children = [];
+            var url;
+            var node;
+            var parent;
 
-        node = {
-            'type': 'paragraph',
-            'children': children
-        };
-
-        if (!settings.file) {
-            parent = node;
-        } else {
-            parent = {
-                'type': 'link',
-                'href': settings.file,
-                'children': []
+            node = {
+                'type': 'paragraph',
+                'children': children
             };
 
-            children.push(parent);
-        }
+            if (!settings.file) {
+                parent = node;
+            } else {
+                parent = {
+                    'type': 'link',
+                    'href': settings.file,
+                    'children': []
+                };
 
-        parent.children.push({
-            'type': 'text',
-            'value': settings.license
-        });
-
-        children.push({
-            'type': 'text',
-            'value': ' © '
-        });
-
-        if (!settings.url) {
-            parent = node;
-        } else {
-            url = settings.url;
-
-            if (
-                url.slice(0, HTTP_PROTOCOL.length) !== HTTP_PROTOCOL &&
-                url.slice(0, HTTPS_PROTOCOL.length) !== HTTPS_PROTOCOL
-            ) {
-                url = HTTP_PROTOCOL + url;
+                children.push(parent);
             }
 
-            parent = {
-                'type': 'link',
-                'href': url,
-                'children': []
-            };
+            parent.children.push({
+                'type': 'text',
+                'value': settings.license
+            });
 
-            children.push(parent);
-        }
+            children.push({
+                'type': 'text',
+                'value': ' © '
+            });
 
-        parent.children.push({
-            'type': 'text',
-            'value': settings.name
+            if (!settings.url) {
+                parent = node;
+            } else {
+                url = settings.url;
+
+                if (
+                    url.slice(0, HTTP_PROTOCOL.length) !== HTTP_PROTOCOL &&
+                    url.slice(0, HTTPS_PROTOCOL.length) !== HTTPS_PROTOCOL
+                ) {
+                    url = HTTP_PROTOCOL + url;
+                }
+
+                parent = {
+                    'type': 'link',
+                    'href': url,
+                    'children': []
+                };
+
+                children.push(parent);
+            }
+
+            parent.children.push({
+                'type': 'text',
+                'value': settings.name
+            });
+
+            return [start, node, end];
         });
-
-        return [start, node, end];
-    }));
+    };
 }
 
 /*
