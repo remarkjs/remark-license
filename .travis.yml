@@ -5,15 +5,21 @@ node_js:
 - '0.12'
 - '4.0'
 - '5.0'
-- iojs
-sudo: false
 after_script: npm install codecov.io && cat ./coverage/lcov.info | codecov
+sudo: false
 deploy:
-  provider: releases
-  api_key:
-    secure: LJ+TIioi0LKXEhIVtXelEkd9VEpjhE08TJoqQbZXdevXKfTvteD3/ia9aFm2MXAxY+/bIiZz/165KzwgdnYQ9Wv8EUCVzmpR+Aifs9xJxMpZ+6qLgH6ZoGFiwL8sCDzyyBpQEnyI4VCgK3v2PWBAH6f2Yk4XLnZ4ZPA+8yvH82sSzwxSciWdCC7xV9JMrlMacHiXYp5XbtIwrhgZWCc3xrPt7VeDVPFJYgfVDBRf8hozZG3n3b2+iqENkd8iNVIzM5s5uXRP+Wnc9IYo7s0KsO/PaTUPJrPenhHcZcC6qbo5j4d4wMgxi+eCmVIvCyU6WdKZ5QydtolePqT/OQk9BNPUtTPvKR5SXIywMtx/lDDFv/vOIDPidfWICNen23T92FzbUhV6Ja1DuhL1BjUu0d4Nhpf1u72Fac1ZGUUrBgK8p9Ir7cDshlrfweUvgHmHsOuWqL4jzsYqB+P06YjytGwwQOK/dNfbH8SHZOOEpcapIXzb+9Uy1f6nEeIxrcCfSxrOkI5MVXyNlPdxOj8xI6deDI5KQnSpFEM6d7dbaPCcGF6OWyicprf9ZbXT9/7lbr4oFDMI1LnGeHRouu6px1eyfN6X082LiL8t1sy7w58shKT1dv/8HbjX7qyr1NMDz8h/B7bURFB/JtnVok5euycZhY1qXus7g8ZFO7Wrltg=
-  file:
-    - "remark-license.js"
-    - "remark-license.min.js"
-  on:
-    tags: true
+  - provider: npm
+    email: tituswormer@gmail.com
+    api_key:
+      secure: MCyXAUxW4xl2XcJK4N/3h3AHBMWwRkvImMTsjFKvg23Av2RagxBFrj8E2T/7ptx/+hkR92GToYWTFu/ktmpqly+PyRamBZcoOfWjJWShqV9UHrPkrQ060PF7TtCZnfHxQa+zh0r7t9M/ViYucZd3jQ3+t3ID5nJvw85GaWI7ScQEZdkOA3qz8KoxDhKIuYDgyf0dNpATN7bpinJsFLOMpDTqVzoxhaE9GlnQO8DZxMQg4RTDj67+qxnl1oFLAYXuqEKFGAQg5E3hxr03DfECoTIdCBZxvKDMXkXwuRTsxcy8PUAHFvTxcN2v4yceWASttJNzIVLnQ1ElmVV63XSPj6BbMGlSEkGA4R3jTvgeIJj4c+vUq0rT11NOWO2/uinVaUJJf6K/SI4FvT6h4tCWkLrcSTZfDTZSc7zlhRg25bOgq6nEtPGws0hqGq9QaoUM4G6++Y8gSufdNqqYqT1Is3LjiB79v6b69OFbULvnsI6WZ18yb4wCI7oWNzO5ts5Fy1+eTpixwJYryekMEggLSrA84mTblDPPyR1qOEkZWFod91J4Nym1m86R4ixrdSmTNvAnBCSo0ePn8Dfwkp0Cg26EYk6gqeKSuYF1cCf2B1HE/FMqFZuhdChp16gwaoSMv53dCmjNPUu+iRtD3P/7+KAysJzOfcizjKJ9TCm4W6Q=
+    on:
+      tags: true
+      node: '5.0'
+  - provider: releases
+    api_key:
+      secure: LJ+TIioi0LKXEhIVtXelEkd9VEpjhE08TJoqQbZXdevXKfTvteD3/ia9aFm2MXAxY+/bIiZz/165KzwgdnYQ9Wv8EUCVzmpR+Aifs9xJxMpZ+6qLgH6ZoGFiwL8sCDzyyBpQEnyI4VCgK3v2PWBAH6f2Yk4XLnZ4ZPA+8yvH82sSzwxSciWdCC7xV9JMrlMacHiXYp5XbtIwrhgZWCc3xrPt7VeDVPFJYgfVDBRf8hozZG3n3b2+iqENkd8iNVIzM5s5uXRP+Wnc9IYo7s0KsO/PaTUPJrPenhHcZcC6qbo5j4d4wMgxi+eCmVIvCyU6WdKZ5QydtolePqT/OQk9BNPUtTPvKR5SXIywMtx/lDDFv/vOIDPidfWICNen23T92FzbUhV6Ja1DuhL1BjUu0d4Nhpf1u72Fac1ZGUUrBgK8p9Ir7cDshlrfweUvgHmHsOuWqL4jzsYqB+P06YjytGwwQOK/dNfbH8SHZOOEpcapIXzb+9Uy1f6nEeIxrcCfSxrOkI5MVXyNlPdxOj8xI6deDI5KQnSpFEM6d7dbaPCcGF6OWyicprf9ZbXT9/7lbr4oFDMI1LnGeHRouu6px1eyfN6X082LiL8t1sy7w58shKT1dv/8HbjX7qyr1NMDz8h/B7bURFB/JtnVok5euycZhY1qXus7g8ZFO7Wrltg=
+    file:
+      - "remark-license.js"
+      - "remark-license.min.js"
+    on:
+      tags: true
