@@ -25,7 +25,7 @@ var license = require('remark-license');
 Process a document:
 
 ```javascript
-var doc = remark.use(license).process([
+var file = remark().use(license).process([
     '## License',
     '',
     'Something nondescript.',

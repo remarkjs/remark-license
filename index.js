@@ -21,8 +21,13 @@ var heading = require('mdast-util-heading-range');
 var fs;
 var path;
 
-try { fs = require('fs'); } catch (e) { /* Empty */ }
-try { path = require('path'); } catch (e) { /* Empty */ }
+try {
+    fs = require('fs');
+} catch (e) { /* Empty */ }
+
+try {
+    path = require('path');
+} catch (e) { /* Empty */ }
 
 /*
  * Expressions.
