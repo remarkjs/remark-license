@@ -2,6 +2,12 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+2.0.1 / 2016-06-13
+==================
+
+*   Update `readme.md` ([`db4967a`](https://github.com/wooorm/remark-license/commit/db4967a))
+*   Update dev-dependencies ([`8ec787d`](https://github.com/wooorm/remark-license/commit/8ec787d))
+
 2.0.0 / 2016-02-13
 ==================
 
