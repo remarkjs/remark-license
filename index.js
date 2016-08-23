@@ -8,184 +8,148 @@
 
 'use strict';
 
-/* eslint-env commonjs */
-
-/* global global */
-
-/*
- * Dependencies.
- */
-
+/* Dependencies. */
 var heading = require('mdast-util-heading-range');
+
+/* Expose. */
+module.exports = license;
 
 var fs;
 var path;
 
 try {
-    fs = require('fs');
-} catch (e) { /* Empty */ }
+  fs = require('fs');
+  path = require('path');
+} catch (err) {}
 
-try {
-    path = require('path');
-} catch (e) { /* Empty */ }
-
-/*
- * Expressions.
- */
-
+/* Expressions. */
 var EXPRESSION = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/;
 var LICENSE = /^licen[cs]e(?=$|\.)/i;
 
-/*
- * Constants.
- */
+/* Constants. */
+var http = 'http://';
+var https = 'https://';
 
-var HTTP_PROTOCOL = 'http://';
-var HTTPS_PROTOCOL = 'https://';
+/* Add a license section. */
+function license(remark, options) {
+  var settings = {};
+  var pack = {};
+  var entries = [];
+  var cwd = global.process && global.process.cwd();
+  var url;
+  var length;
+  var index;
 
-/**
- * Adds an license section.
- *
- * @param {Remark} remark - Instance
- * @param {Object?} options - Configuration.
- */
-function attacher(remark, options) {
-    var settings = {};
-    var pack = {};
-    var entries = [];
-    var cwd = global.process && global.process.cwd();
-    var url;
-    var length;
-    var index;
+  if (!options) {
+    options = {};
+  }
 
-    if (options === null || options === undefined) {
-        options = {};
-    }
+  try {
+    pack = require(path.resolve(cwd, 'package.json'));
+  } catch (err) {}
 
+  if (typeof pack.author === 'string') {
+    url = EXPRESSION.exec(pack.author);
+    settings.name = url[1];
+    settings.url = url[3];
+  } else if (pack.author && pack.author.name) {
+    settings.name = pack.author.name;
+    settings.url = pack.author.url;
+  }
+
+  if (options.file) {
+    settings.file = options.file;
+  } else {
     try {
-        pack = require(path.resolve(cwd, 'package.json'));
-    } catch (exception) { /* Empty */ }
+      entries = fs.readdirSync(cwd);
+    } catch (err) { /* Empty */ }
 
-    if (typeof pack.author === 'string') {
-        url = EXPRESSION.exec(pack.author);
-        settings.name = url[1];
-        settings.url = url[3];
-    } else if (pack.author && pack.author.name) {
-        settings.name = pack.author.name;
-        settings.url = pack.author.url;
+    length = entries.length;
+    index = -1;
+
+    while (++index < length) {
+      if (LICENSE.test(entries[index])) {
+        settings.file = entries[index];
+        break;
+      }
     }
+  }
 
-    if (options.file) {
-        settings.file = options.file;
-    } else {
-        try {
-            entries = fs.readdirSync(cwd);
-        } catch (exception) { /* Empty */ }
+  if (options.url) {
+    settings.url = options.url;
+  }
 
-        length = entries.length;
-        index = -1;
+  if (options.name) {
+    settings.name = options.name;
+  }
 
-        while (++index < length) {
-            if (LICENSE.test(entries[index])) {
-                settings.file = entries[index];
-                break;
-            }
+  settings.license = options.license || pack.license;
+
+  if (!settings.license) {
+    throw new Error(
+      'Missing required `license` in settings.\n' +
+      'Either add a `license` to a `package.json` file\n' +
+      'or pass it into `remark-license`'
+    );
+  }
+
+  if (!settings.name) {
+    throw new Error(
+      'Missing required `name` in settings.\n' +
+      'Either add an `author` to a `package.json` file\n' +
+      'or pass it into `remark-license`'
+    );
+  }
+
+  return transformer;
+
+  function transformer(tree) {
+    heading(tree, /^licen[cs]e$/i, function (start, nodes, end) {
+      var children = [];
+      var node = {type: 'paragraph', children: children};
+      var url;
+      var parent;
+
+      if (settings.file) {
+        parent = {
+          type: 'link',
+          url: settings.file,
+          children: []
+        };
+
+        children.push(parent);
+      } else {
+        parent = node;
+      }
+
+      parent.children.push({type: 'text', value: settings.license});
+
+      children.push({type: 'text', value: ' © '});
+
+      if (settings.url) {
+        url = settings.url;
+
+        if (
+          url.slice(0, http.length) !== http &&
+          url.slice(0, https.length) !== https
+        ) {
+          url = http + url;
         }
-    }
 
-    if (options.url) {
-        settings.url = options.url;
-    }
+        parent = {
+          type: 'link',
+          url: url,
+          children: []
+        };
 
-    if (options.name) {
-        settings.name = options.name;
-    }
+        children.push(parent);
+      } else {
+        parent = node;
+      }
 
-    settings.license = options.license || pack.license;
+      parent.children.push({type: 'text', value: settings.name});
 
-    if (!settings.license) {
-        throw new Error(
-            'Missing required `license` in settings.\n' +
-            'Either add a `license` to a `package.json` file\n' +
-            'or pass it into `remark-license`'
-        );
-    }
-
-    if (!settings.name) {
-        throw new Error(
-            'Missing required `name` in settings.\n' +
-            'Either add an `author` to a `package.json` file\n' +
-            'or pass it into `remark-license`'
-        );
-    }
-
-    return function (tree) {
-        heading(tree, /^licen[cs]e$/i, function (start, nodes, end) {
-            var children = [];
-            var url;
-            var node;
-            var parent;
-
-            node = {
-                'type': 'paragraph',
-                'children': children
-            };
-
-            if (!settings.file) {
-                parent = node;
-            } else {
-                parent = {
-                    'type': 'link',
-                    'url': settings.file,
-                    'children': []
-                };
-
-                children.push(parent);
-            }
-
-            parent.children.push({
-                'type': 'text',
-                'value': settings.license
-            });
-
-            children.push({
-                'type': 'text',
-                'value': ' © '
-            });
-
-            if (!settings.url) {
-                parent = node;
-            } else {
-                url = settings.url;
-
-                if (
-                    url.slice(0, HTTP_PROTOCOL.length) !== HTTP_PROTOCOL &&
-                    url.slice(0, HTTPS_PROTOCOL.length) !== HTTPS_PROTOCOL
-                ) {
-                    url = HTTP_PROTOCOL + url;
-                }
-
-                parent = {
-                    'type': 'link',
-                    'url': url,
-                    'children': []
-                };
-
-                children.push(parent);
-            }
-
-            parent.children.push({
-                'type': 'text',
-                'value': settings.name
-            });
-
-            return [start, node, end];
-        });
-    };
+      return [start, node, end];
+    });
+  }
 }
-
-/*
- * Expose `attacher`.
- */
-
-module.exports = attacher;

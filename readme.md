@@ -1,8 +1,6 @@
 # remark-license [![Build Status][build-badge]][build-status] [![Coverage Status][coverage-badge]][coverage-status] [![Chat][chat-badge]][chat]
 
-<!--lint disable list-item-spacing heading-increment final-definition-->
-
-Add a [license](#license) section to a README with [**remark**][remark].
+Add a [license][sec] section to a README with [**remark**][remark].
 
 ## Installation
 
@@ -11,9 +9,6 @@ Add a [license](#license) section to a README with [**remark**][remark].
 ```bash
 npm install remark-license
 ```
-
-**remark-license** is also available as an AMD, CommonJS, and
-globals module, [uncompressed and compressed][releases].
 
 ## Usage
 
@@ -56,13 +51,12 @@ Does nothing when no heading is found.
 *   `name` (`string`, optional)
     — License holder.  Detected from the `package.json` in the
     current working directory, supporting both [`object` and
-    `string`](https://docs.npmjs.com/files/package.json#people-fields-author-contributors)
-    format of `author`.
+    `string`][author-format] format of `author`.
     _Throws when neither given nor detected._
 *   `license` (`string`, optional)
-    — [SPDX](https://spdx.org/licenses/) identifier.
-    Detected from the `package.json`’s `license` field in the current
-    working directory.  Deprecated license objects are not supported.
+    — [SPDX][] identifier.  Detected from the `license` field in
+    the `package.json` in the current working directory.  Deprecated
+    license objects are not supported.
     _Throws when neither given nor detected._
 *   `file` (`string`, optional)
     — File-name of license file.  Detected from the files in the current
@@ -71,9 +65,12 @@ Does nothing when no heading is found.
 *   `url` (`string`, optional)
     — URL to license holder.  Detected from the `package.json` in the
     current working directory, supporting both [`object` and
-    `string`](https://docs.npmjs.com/files/package.json#people-fields-author-contributors)
-    format of `author`.
+    `string`][author-format] format of `author`.
     `http://` is prepended if `url` starts without HTTP or HTTPS protocol.
+
+## License
+
+[MIT][license] © [Titus Wormer][author]
 
 <!-- Definitions -->
 
@@ -89,12 +86,16 @@ Does nothing when no heading is found.
 
 [chat]: https://gitter.im/wooorm/remark
 
-[releases]: https://github.com/wooorm/remark-license/releases
+[license]: LICENSE
+
+[author]: http://wooorm.com
 
 [npm]: https://docs.npmjs.com/cli/install
 
 [remark]: https://github.com/wooorm/remark
 
-## License
+[author-format]: https://docs.npmjs.com/files/package.json#people-fields-author-contributors
 
-[MIT](LICENSE) © [Titus Wormer](http://wooorm.com)
+[spdx]: https://spdx.org/licenses/
+
+[sec]: #license
