@@ -31,12 +31,12 @@
   "devDependencies": {
     "browserify": "^13.0.0",
     "esmangle": "^1.0.0",
-    "nyc": "^8.0.0",
+    "nyc": "^10.0.0",
     "remark": "^6.0.0",
     "remark-cli": "^2.0.0",
     "remark-preset-wooorm": "^1.0.0",
     "tape": "^4.4.0",
-    "xo": "^0.16.0"
+    "xo": "^0.17.1"
   },
   "scripts": {
     "build-md": "remark *.md --quiet --frail",
@@ -56,6 +56,9 @@
   },
   "xo": {
     "space": true,
+    "rules": {
+      "import/no-dynamic-require": "off"
+    },
     "ignores": [
       "remark-license.js"
     ]
