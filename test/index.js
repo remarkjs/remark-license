@@ -1,25 +1,16 @@
-/**
- * @author Titus Wormer
- * @copyright 2015 Titus Wormer
- * @license MIT
- * @module remark:license:test
- * @fileoverview Test suite for remark-license.
- */
-
 'use strict';
 
-/* Dependencies. */
 var fs = require('fs');
 var path = require('path');
 var test = require('tape');
 var remark = require('remark');
 var license = require('..');
 
-/* Methods. */
 var read = fs.readFileSync;
 var exists = fs.existsSync;
 
-/* Tests. */
+var ROOT = path.join(__dirname, 'fixtures');
+
 test('remark-license()', function (t) {
   t.equal(typeof license, 'function', 'should be a function');
 
@@ -30,15 +21,10 @@ test('remark-license()', function (t) {
   t.end();
 });
 
-/* Constants. */
-var ROOT = path.join(__dirname, 'fixtures');
-
-/* Set-up working-directory changes. */
 test.onFinish(function () {
   process.chdir(path.join(__dirname, '..'));
 });
 
-/* Gather fixtures. */
 test('Fixtures', function (t) {
   fs.readdirSync(ROOT)
     .filter(function (filepath) {

@@ -1,17 +1,7 @@
-/**
- * @author Titus Wormer
- * @copyright 2015 Titus Wormer
- * @license MIT
- * @module remark:license
- * @fileoverview Add a license section to your README.
- */
-
 'use strict';
 
-/* Dependencies. */
 var heading = require('mdast-util-heading-range');
 
-/* Expose. */
 module.exports = license;
 
 var fs;
@@ -22,11 +12,9 @@ try {
   path = require('path');
 } catch (err) {}
 
-/* Expressions. */
 var EXPRESSION = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/;
 var LICENSE = /^licen[cs]e(?=$|\.)/i;
 
-/* Constants. */
 var http = 'http://';
 var https = 'https://';
 
