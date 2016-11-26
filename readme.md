@@ -12,22 +12,18 @@ npm install remark-license
 
 ## Usage
 
-Require dependencies:
-
 ```javascript
 var remark = require('remark');
 var license = require('remark-license');
-```
 
-Process a document:
-
-```javascript
 var file = remark().use(license).process([
-    '## License',
-    '',
-    'Something nondescript.',
-    ''
+  '## License',
+  '',
+  'Something nondescript.',
+  ''
 ].join('\n'));
+
+console.log(String(file));
 ```
 
 Yields:
