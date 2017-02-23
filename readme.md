@@ -16,7 +16,7 @@ npm install remark-license
 var remark = require('remark');
 var license = require('remark-license');
 
-var file = remark().use(license).process([
+var file = remark().use(license).processSync([
   '## License',
   '',
   'Something nondescript.',

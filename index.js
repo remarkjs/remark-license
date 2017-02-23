@@ -19,7 +19,7 @@ var http = 'http://';
 var https = 'https://';
 
 /* Add a license section. */
-function license(remark, options) {
+function license(options) {
   var settings = {};
   var pack = {};
   var entries = [];

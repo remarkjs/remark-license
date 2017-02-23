@@ -11,11 +11,11 @@ var exists = fs.existsSync;
 
 var ROOT = path.join(__dirname, 'fixtures');
 
-test('remark-license()', function (t) {
+test('license()', function (t) {
   t.equal(typeof license, 'function', 'should be a function');
 
   t.doesNotThrow(function () {
-    license(remark());
+    license.call(remark());
   }, 'should not throw if not passed options');
 
   t.end();
@@ -47,7 +47,7 @@ test('Fixtures', function (t) {
       fail = fixture.indexOf('fail-') === 0 ? fixture.slice(5) : '';
 
       try {
-        result = remark().use(license, config).process(input).toString();
+        result = remark().use(license, config).processSync(input).toString();
 
         t.equal(result, output, 'should work on `' + fixture + '`');
       } catch (err) {
