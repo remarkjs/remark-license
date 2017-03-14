@@ -21,8 +21,10 @@ test('license()', function (t) {
   t.end();
 });
 
-test.onFinish(function () {
-  process.chdir(path.join(__dirname, '..'));
+test('current working directory', function (t) {
+  var result = remark().use(license).processSync('# License').toString();
+  t.equal(result, '# License\n\n[MIT](LICENSE) © [Titus Wormer](http://wooorm.com)\n');
+  t.end();
 });
 
 test('Fixtures', function (t) {
@@ -38,8 +40,6 @@ test('Fixtures', function (t) {
       var result;
       var fail;
 
-      process.chdir(filepath);
-
       config = exists(config) ? require(config) : {};
       output = exists(output) ? read(output, 'utf-8') : '';
       input = read(path.join(filepath, 'readme.md'), 'utf-8');
@@ -47,8 +47,7 @@ test('Fixtures', function (t) {
       fail = fixture.indexOf('fail-') === 0 ? fixture.slice(5) : '';
 
       try {
-        result = remark().use(license, config).processSync(input).toString();
-
+        result = remark().use(license, config).processSync({contents: input, cwd: filepath}).toString();
         t.equal(result, output, 'should work on `' + fixture + '`');
       } catch (err) {
         if (!fail) {

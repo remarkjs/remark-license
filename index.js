@@ -20,78 +20,78 @@ var https = 'https://';
 
 /* Add a license section. */
 function license(options) {
-  var settings = {};
-  var pack = {};
-  var entries = [];
-  var cwd = global.process && global.process.cwd();
-  var url;
-  var length;
-  var index;
-
-  if (!options) {
-    options = {};
-  }
-
-  try {
-    pack = require(path.resolve(cwd, 'package.json'));
-  } catch (err) {}
-
-  if (typeof pack.author === 'string') {
-    url = EXPRESSION.exec(pack.author);
-    settings.name = url[1];
-    settings.url = url[3];
-  } else if (pack.author && pack.author.name) {
-    settings.name = pack.author.name;
-    settings.url = pack.author.url;
-  }
-
-  if (options.file) {
-    settings.file = options.file;
-  } else {
-    try {
-      entries = fs.readdirSync(cwd);
-    } catch (err) { /* Empty */ }
-
-    length = entries.length;
-    index = -1;
-
-    while (++index < length) {
-      if (LICENSE.test(entries[index])) {
-        settings.file = entries[index];
-        break;
-      }
-    }
-  }
-
-  if (options.url) {
-    settings.url = options.url;
-  }
-
-  if (options.name) {
-    settings.name = options.name;
-  }
-
-  settings.license = options.license || pack.license;
-
-  if (!settings.license) {
-    throw new Error(
-      'Missing required `license` in settings.\n' +
-      'Either add a `license` to a `package.json` file\n' +
-      'or pass it into `remark-license`'
-    );
-  }
-
-  if (!settings.name) {
-    throw new Error(
-      'Missing required `name` in settings.\n' +
-      'Either add an `author` to a `package.json` file\n' +
-      'or pass it into `remark-license`'
-    );
-  }
-
   return transformer;
 
-  function transformer(tree) {
+  function transformer(tree, file) {
+    var settings = {};
+    var pack = {};
+    var entries = [];
+    var cwd = file.cwd;
+    var url;
+    var length;
+    var index;
+
+    if (!options) {
+      options = {};
+    }
+
+    try {
+      pack = require(path.resolve(cwd, 'package.json'));
+    } catch (err) {}
+
+    if (typeof pack.author === 'string') {
+      url = EXPRESSION.exec(pack.author);
+      settings.name = url[1];
+      settings.url = url[3];
+    } else if (pack.author && pack.author.name) {
+      settings.name = pack.author.name;
+      settings.url = pack.author.url;
+    }
+
+    if (options.file) {
+      settings.file = options.file;
+    } else {
+      try {
+        entries = fs.readdirSync(cwd);
+      } catch (err) { /* Empty */ }
+
+      length = entries.length;
+      index = -1;
+
+      while (++index < length) {
+        if (LICENSE.test(entries[index])) {
+          settings.file = entries[index];
+          break;
+        }
+      }
+    }
+
+    if (options.url) {
+      settings.url = options.url;
+    }
+
+    if (options.name) {
+      settings.name = options.name;
+    }
+
+    settings.license = options.license || pack.license;
+
+    if (!settings.license) {
+      throw new Error(
+        'Missing required `license` in settings.\n' +
+        'Either add a `license` to a `package.json` file\n' +
+        'or pass it into `remark-license`'
+      );
+    }
+
+    if (!settings.name) {
+      throw new Error(
+        'Missing required `name` in settings.\n' +
+        'Either add an `author` to a `package.json` file\n' +
+        'or pass it into `remark-license`'
+      );
+    }
+
     heading(tree, /^licen[cs]e$/i, function (start, nodes, end) {
       var children = [];
       var node = {type: 'paragraph', children: children};
