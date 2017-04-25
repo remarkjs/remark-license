@@ -45,24 +45,52 @@ Does nothing when no heading is found.
 ###### `options`
 
 *   `name` (`string`, optional)
-    — License holder.  Detected from the `package.json` in the
+    — License holder.  [Detected][] from the `package.json` in the
     current working directory, supporting both [`object` and
     `string`][author-format] format of `author`.
     _Throws when neither given nor detected._
 *   `license` (`string`, optional)
-    — [SPDX][] identifier.  Detected from the `license` field in
+    — [SPDX][] identifier.  [Detected][] from the `license` field in
     the `package.json` in the current working directory.  Deprecated
     license objects are not supported.
     _Throws when neither given nor detected._
 *   `file` (`string`, optional)
-    — File-name of license file.  Detected from the files in the current
+    — File-name of license file.  [Detected][] from the files in the current
     working directory, in which case the first file matching
     `/^licen[cs]e(?=$|\.)/i` is used.
 *   `url` (`string`, optional)
-    — URL to license holder.  Detected from the `package.json` in the
+    — URL to license holder.  [Detected][] from the `package.json` in the
     current working directory, supporting both [`object` and
     `string`][author-format] format of `author`.
     `http://` is prepended if `url` starts without HTTP or HTTPS protocol.
+
+## Detection
+
+Detection of `package.json` and files in the current working directory is
+based on the current working directory as set on the given [`vfile`][vfile].
+
+If you want to set the cwd yourself (the default is `process.cwd()`), you can
+pass in a `vfile` or [`vfile` options][vfile-options] to `.process` like so:
+
+```js
+var remark = require('remark');
+var license = require('remark-license');
+var vfile = require('vfile');
+
+var file = vfile({
+  cwd: './some/path/to/a/directory',
+  contents: [
+    '## License',
+    '',
+    'Something nondescript.',
+    ''
+  ].join('\n')
+});
+
+remark().use(license).processSync(file);
+
+console.log(String(file));
+```
 
 ## License
 
@@ -94,4 +122,10 @@ Does nothing when no heading is found.
 
 [spdx]: https://spdx.org/licenses/
 
+[vfile]: https://github.com/vfile/vfile
+
+[vfile-options]: https://github.com/vfile/vfile#vfileoptions
+
 [sec]: #license
+
+[detected]: #detection
