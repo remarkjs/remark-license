@@ -104,6 +104,17 @@ remark()
   });
 ```
 
+## Related
+
+*   [`remark-collapse`](https://github.com/Rokt33r/remark-collapse)
+    — Make a section collapsible
+*   [`remark-contributors`](https://github.com/hughsk/remark-contributors)
+    — Add a list of contributors
+*   [`remark-toc`](https://github.com/wooorm/remark-toc)
+    — Add a table of contents
+*   [`remark-usage`](https://github.com/wooorm/remark-usage)
+    — Add a usage example
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
