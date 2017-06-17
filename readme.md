@@ -88,23 +88,20 @@ If you want to set the cwd yourself (the default is `process.cwd()`), you can
 pass in a `vfile` or [`vfile` options][vfile-options] to `.process` like so:
 
 ```js
+var fs = require('fs');
+var path = require('path');
 var remark = require('remark');
 var license = require('remark-license');
-var vfile = require('vfile');
 
-var file = vfile({
-  cwd: './some/path/to/a/directory',
-  contents: [
-    '## License',
-    '',
-    'Something nondescript.',
-    ''
-  ].join('\n')
-});
-
-remark().use(license).processSync(file);
-
-console.log(String(file));
+remark()
+  .use(license)
+  .process({
+    cwd: path.join('.', 'some', 'path', 'to', 'a', 'directory'),
+    contents: fs.readFileSync('example.md')
+  }, function (err, file) {
+    if (err) throw err;
+    console.log(String(file));
+  });
 ```
 
 ## License
