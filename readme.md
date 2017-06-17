@@ -12,23 +12,32 @@ npm install remark-license
 
 ## Usage
 
+Say we have the following file, `example.md`:
+
+```markdown
+## License
+
+Something nondescript.
+```
+
+And our script, `example.js`, looks as follows:
+
 ```javascript
+var fs = require('fs');
 var remark = require('remark');
 var license = require('remark-license');
 
-var file = remark().use(license).processSync([
-  '## License',
-  '',
-  'Something nondescript.',
-  ''
-].join('\n'));
-
-console.log(String(file));
+remark()
+  .use(license)
+  .process(fs.readFileSync('example.md'), function (err, file) {
+    if (err) throw err;
+    console.log(String(file));
+  });
 ```
 
-Yields:
+Now, running `node example` yields:
 
-```md
+```markdown
 ## License
 
 [MIT](LICENSE) © [Titus Wormer](http://wooorm.com)
