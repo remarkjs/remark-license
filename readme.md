@@ -51,27 +51,33 @@ Add a license section to heading containing `/^licen[cs]e$/i`.
 Replaces the original content of the section.
 Does nothing when no heading is found.
 
-###### `options`
+##### `options`
 
-*   `name` (`string`, optional)
-    — License holder.  [Detected][] from the `package.json` in the
-    current working directory, supporting both [`object` and
-    `string`][author-format] format of `author`.
-    _Throws when neither given nor detected._
-*   `license` (`string`, optional)
-    — [SPDX][] identifier.  [Detected][] from the `license` field in
-    the `package.json` in the current working directory.  Deprecated
-    license objects are not supported.
-    _Throws when neither given nor detected._
-*   `file` (`string`, optional)
-    — File-name of license file.  [Detected][] from the files in the current
-    working directory, in which case the first file matching
-    `/^licen[cs]e(?=$|\.)/i` is used.
-*   `url` (`string`, optional)
-    — URL to license holder.  [Detected][] from the `package.json` in the
-    current working directory, supporting both [`object` and
-    `string`][author-format] format of `author`.
-    `http://` is prepended if `url` starts without HTTP or HTTPS protocol.
+###### `options.name`
+
+`string`, optional — License holder.  [Detected][] from the `package.json` in
+the current working directory, supporting both [`object` and
+`string`][author-format] format of `author`.  _Throws when neither given nor
+detected._
+
+###### `options.license`
+
+`string`, optional — [SPDX][] identifier.  [Detected][] from the `license`
+field in the `package.json` in the current working directory.  Deprecated
+license objects are not supported.  _Throws when neither given nor detected._
+
+###### `options.file`
+
+`string`, optional — File-name of license file.  [Detected][] from the files
+in the current working directory, in which case the first file matching
+`/^licen[cs]e(?=$|\.)/i` is used.
+
+###### `options.url`
+
+`string`, optional — URL to license holder.  [Detected][] from the
+`package.json` in the current working directory, supporting both [`object`
+and `string`][author-format] format of `author`.  `http://` is prepended if
+`url` starts without HTTP or HTTPS protocol.
 
 ## Detection
 
