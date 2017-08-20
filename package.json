@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "mdast-util-heading-range": "^2.0.0",
+    "parse-author": "^2.0.0",
     "spdx-license-list": "^3.0.1"
   },
   "files": [

@@ -1,5 +1,6 @@
 'use strict';
 
+var parse = require('parse-author');
 var spdxLicenseList = require('spdx-license-list');
 var heading = require('mdast-util-heading-range');
 
@@ -13,7 +14,6 @@ try {
   path = require('path');
 } catch (err) {}
 
-var EXPRESSION = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/;
 var LICENSE = /^licen[cs]e(?=$|\.)/i;
 
 var http = 'http://';
@@ -28,7 +28,6 @@ function license(options) {
     var pack = {};
     var entries = [];
     var cwd = file.cwd;
-    var url;
     var length;
     var index;
 
@@ -41,10 +40,10 @@ function license(options) {
     } catch (err) {}
 
     if (typeof pack.author === 'string') {
-      url = EXPRESSION.exec(pack.author);
-      settings.name = url[1];
-      settings.url = url[3];
-    } else if (pack.author && pack.author.name) {
+      pack.author = parse(pack.author);
+    }
+
+    if (pack.author && pack.author.name) {
       settings.name = pack.author.name;
       settings.url = pack.author.url;
     }
