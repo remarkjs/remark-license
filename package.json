@@ -20,7 +20,8 @@
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
   ],
   "dependencies": {
-    "mdast-util-heading-range": "^2.0.0"
+    "mdast-util-heading-range": "^2.0.0",
+    "spdx-license-list": "^3.0.1"
   },
   "files": [
     "index.js"

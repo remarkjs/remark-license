@@ -1,5 +1,6 @@
 'use strict';
 
+var spdxLicenseList = require('spdx-license-list');
 var heading = require('mdast-util-heading-range');
 
 module.exports = license;
@@ -82,6 +83,11 @@ function license(options) {
         'Either add a `license` to a `package.json` file\n' +
         'or pass it into `remark-license`'
       );
+    }
+
+    // If license was still not found then try to find its url
+    if (!settings.file && spdxLicenseList[settings.license]) {
+      settings.file = spdxLicenseList[settings.license].url;
     }
 
     if (!settings.name) {
