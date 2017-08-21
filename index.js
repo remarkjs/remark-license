@@ -35,6 +35,11 @@ function license(options) {
       options = {};
     }
 
+    // Don't add to license files themselves, that'd be redundant
+    if (file.stem && file.stem.toLowerCase() === 'license') {
+      return;
+    }
+
     try {
       pack = require(path.resolve(cwd, 'package.json'));
     } catch (err) {}

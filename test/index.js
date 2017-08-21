@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var vfile = require('vfile');
 var test = require('tape');
 var remark = require('remark');
 var license = require('..');
@@ -24,6 +25,13 @@ test('license()', function (t) {
 test('current working directory', function (t) {
   var result = remark().use(license).processSync('# License').toString();
   t.equal(result, '# License\n\n[MIT](LICENSE) © [Titus Wormer](http://wooorm.com)\n');
+  t.end();
+});
+
+test('do not add license to license file itself', function (t) {
+  var file = vfile({path: '~/LICENSE.txt', contents: 'Alpha *braavo* charlie.'});
+  var result = remark().use(license).processSync(file).toString();
+  t.equal(result, 'Alpha _braavo_ charlie.\n');
   t.end();
 });
 
