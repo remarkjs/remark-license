@@ -36,7 +36,7 @@ function license(options) {
     }
 
     // Don't add to license files themselves, that'd be redundant
-    if (file.stem && file.stem.toLowerCase() === 'license') {
+    if (file.stem && LICENSE.test(file.stem)) {
       return;
     }
 
@@ -58,7 +58,9 @@ function license(options) {
     } else {
       try {
         entries = fs.readdirSync(cwd);
-      } catch (err) { /* Empty */ }
+      } catch (err) {
+        /* Empty */
+      }
 
       length = entries.length;
       index = -1;
@@ -84,8 +86,8 @@ function license(options) {
     if (!settings.license) {
       throw new Error(
         'Missing required `license` in settings.\n' +
-        'Either add a `license` to a `package.json` file\n' +
-        'or pass it into `remark-license`'
+          'Either add a `license` to a `package.json` file\n' +
+          'or pass it into `remark-license`'
       );
     }
 
@@ -97,8 +99,8 @@ function license(options) {
     if (!settings.name) {
       throw new Error(
         'Missing required `name` in settings.\n' +
-        'Either add an `author` to a `package.json` file\n' +
-        'or pass it into `remark-license`'
+          'Either add an `author` to a `package.json` file\n' +
+          'or pass it into `remark-license`'
       );
     }
 
