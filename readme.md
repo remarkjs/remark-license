@@ -40,7 +40,7 @@ Now, running `node example` yields:
 ```markdown
 ## License
 
-[MIT](LICENSE) © [Titus Wormer](http://wooorm.com)
+[MIT](LICENSE) © [Titus Wormer](http://remarkjs.com)
 ```
 
 ## API
@@ -110,9 +110,9 @@ remark()
     — Make a section collapsible
 *   [`remark-contributors`](https://github.com/hughsk/remark-contributors)
     — Add a list of contributors
-*   [`remark-toc`](https://github.com/wooorm/remark-toc)
+*   [`remark-toc`](https://github.com/remarkjs/remark-toc)
     — Add a table of contents
-*   [`remark-usage`](https://github.com/wooorm/remark-usage)
+*   [`remark-usage`](https://github.com/remarkjs/remark-usage)
     — Add a usage example
 
 ## License
@@ -121,17 +121,17 @@ remark()
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/wooorm/remark-license.svg
+[build-badge]: https://img.shields.io/travis/remarkjs/remark-license.svg
 
-[build-status]: https://travis-ci.org/wooorm/remark-license
+[build-status]: https://travis-ci.org/remarkjs/remark-license
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/remark-license.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/remarkjs/remark-license.svg
 
-[coverage-status]: https://codecov.io/github/wooorm/remark-license
+[coverage-status]: https://codecov.io/github/remarkjs/remark-license
 
-[chat-badge]: https://img.shields.io/gitter/room/wooorm/remark.svg
+[chat-badge]: https://img.shields.io/gitter/room/remarkjs/Lobby.svg
 
-[chat]: https://gitter.im/wooorm/remark
+[chat]: https://gitter.im/remarkjs/Lobby
 
 [license]: LICENSE
 
@@ -139,7 +139,7 @@ remark()
 
 [npm]: https://docs.npmjs.com/cli/install
 
-[remark]: https://github.com/wooorm/remark
+[remark]: https://github.com/remarkjs/remark
 
 [author-format]: https://docs.npmjs.com/files/package.json#people-fields-author-contributors
 
