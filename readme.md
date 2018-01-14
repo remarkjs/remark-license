@@ -43,6 +43,23 @@ Now, running `node example` yields:
 [MIT](LICENSE) © [Titus Wormer](http://remarkjs.com)
 ```
 
+Lastly, did you fork a package and need to retain the original license, yet
+update the author field in `package.json`?  No problem, just add the option
+`name` to your `package.json` configuration for this plugin:
+
+```json
+"remarkConfig": {
+  "plugins": [
+    [
+      "remark-license",
+      {
+        "name": "Titus Wormer"
+      }
+    ]
+  ]
+},
+```
+
 ## API
 
 ### `remark.use(license[, options])`

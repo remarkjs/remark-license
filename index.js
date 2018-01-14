@@ -1,5 +1,7 @@
 'use strict';
 
+var parse = require('parse-author');
+var spdxLicenseList = require('spdx-license-list');
 var heading = require('mdast-util-heading-range');
 
 module.exports = license;
@@ -12,7 +14,6 @@ try {
   path = require('path');
 } catch (err) {}
 
-var EXPRESSION = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/;
 var LICENSE = /^licen[cs]e(?=$|\.)/i;
 
 var http = 'http://';
@@ -27,7 +28,6 @@ function license(options) {
     var pack = {};
     var entries = [];
     var cwd = file.cwd;
-    var url;
     var length;
     var index;
 
@@ -35,15 +35,20 @@ function license(options) {
       options = {};
     }
 
+    // Don't add to license files themselves, that'd be redundant
+    if (file.stem && LICENSE.test(file.stem)) {
+      return;
+    }
+
     try {
       pack = require(path.resolve(cwd, 'package.json'));
     } catch (err) {}
 
     if (typeof pack.author === 'string') {
-      url = EXPRESSION.exec(pack.author);
-      settings.name = url[1];
-      settings.url = url[3];
-    } else if (pack.author && pack.author.name) {
+      pack.author = parse(pack.author);
+    }
+
+    if (pack.author && pack.author.name) {
       settings.name = pack.author.name;
       settings.url = pack.author.url;
     }
@@ -53,7 +58,9 @@ function license(options) {
     } else {
       try {
         entries = fs.readdirSync(cwd);
-      } catch (err) { /* Empty */ }
+      } catch (err) {
+        /* Empty */
+      }
 
       length = entries.length;
       index = -1;
@@ -79,16 +86,21 @@ function license(options) {
     if (!settings.license) {
       throw new Error(
         'Missing required `license` in settings.\n' +
-        'Either add a `license` to a `package.json` file\n' +
-        'or pass it into `remark-license`'
+          'Either add a `license` to a `package.json` file\n' +
+          'or pass it into `remark-license`'
       );
+    }
+
+    // If license was still not found then try to find its url
+    if (!settings.file && spdxLicenseList[settings.license]) {
+      settings.file = spdxLicenseList[settings.license].url;
     }
 
     if (!settings.name) {
       throw new Error(
         'Missing required `name` in settings.\n' +
-        'Either add an `author` to a `package.json` file\n' +
-        'or pass it into `remark-license`'
+          'Either add an `author` to a `package.json` file\n' +
+          'or pass it into `remark-license`'
       );
     }
 

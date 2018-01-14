@@ -2,4 +2,4 @@
 
 ## License
 
-MIT © Titus Wormer
+[MIT](http://www.opensource.org/licenses/MIT) © Titus Wormer
