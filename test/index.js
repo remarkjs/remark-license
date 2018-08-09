@@ -57,9 +57,9 @@ test('Fixtures', function (t) {
         fail = new RegExp(fail.replace(/-/g, ' '), 'i');
 
         t.equal(
-            fail.test(err.toString().replace(/`/g, '')),
-            true,
-            'should fail on `' + fixture + '`'
+          fail.test(err.toString().replace(/`/g, '')),
+          true,
+          'should fail on `' + fixture + '`'
         );
       }
     });
