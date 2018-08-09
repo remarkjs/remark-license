@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-- '4.0'
-- '9.0'
+- lts/boron
+- node
 after_script: bash <(curl -s https://codecov.io/bash)
 deploy:
   - provider: npm
@@ -11,7 +11,6 @@ deploy:
       secure: MCyXAUxW4xl2XcJK4N/3h3AHBMWwRkvImMTsjFKvg23Av2RagxBFrj8E2T/7ptx/+hkR92GToYWTFu/ktmpqly+PyRamBZcoOfWjJWShqV9UHrPkrQ060PF7TtCZnfHxQa+zh0r7t9M/ViYucZd3jQ3+t3ID5nJvw85GaWI7ScQEZdkOA3qz8KoxDhKIuYDgyf0dNpATN7bpinJsFLOMpDTqVzoxhaE9GlnQO8DZxMQg4RTDj67+qxnl1oFLAYXuqEKFGAQg5E3hxr03DfECoTIdCBZxvKDMXkXwuRTsxcy8PUAHFvTxcN2v4yceWASttJNzIVLnQ1ElmVV63XSPj6BbMGlSEkGA4R3jTvgeIJj4c+vUq0rT11NOWO2/uinVaUJJf6K/SI4FvT6h4tCWkLrcSTZfDTZSc7zlhRg25bOgq6nEtPGws0hqGq9QaoUM4G6++Y8gSufdNqqYqT1Is3LjiB79v6b69OFbULvnsI6WZ18yb4wCI7oWNzO5ts5Fy1+eTpixwJYryekMEggLSrA84mTblDPPyR1qOEkZWFod91J4Nym1m86R4ixrdSmTNvAnBCSo0ePn8Dfwkp0Cg26EYk6gqeKSuYF1cCf2B1HE/FMqFZuhdChp16gwaoSMv53dCmjNPUu+iRtD3P/7+KAysJzOfcizjKJ9TCm4W6Q=
     on:
       tags: true
-      node: '9.0'
   - provider: releases
     skip_cleanup: true
     api_key:
@@ -21,4 +20,3 @@ deploy:
       - "remark-license.min.js"
     on:
       tags: true
-      node: '9.0'
