@@ -21,8 +21,12 @@ var https = 'https://'
 
 /* Add a license section. */
 function license(options) {
-  if (!options) {
-    options = {}
+  var opts = options || {}
+  var finals = opts.ignoreFinalDefinitions
+  var headingOptions = {
+    ignoreFinalDefinitions:
+      finals === undefined || finals === null ? true : finals,
+    test: licenseHeadingRegexp
   }
 
   return transformer
@@ -36,13 +40,13 @@ function license(options) {
     var defaultLicenseFile
 
     // Skip package loading if we have all info in `options`.
-    if (options.url && options.name && options.license) {
+    if (opts.url && opts.name && opts.license) {
       one()
     } else {
       fs.readFile(path.resolve(cwd, 'package.json'), onpackage)
     }
 
-    if (options.file) {
+    if (opts.file) {
       one()
     } else {
       fs.readdir(cwd, onfiles)
@@ -106,10 +110,10 @@ function license(options) {
     }
 
     function done() {
-      var url = options.url || defaultUrl
-      var name = options.name || defaultName
-      var license = options.license || defaultLicense
-      var licenseFile = options.file || defaultLicenseFile
+      var url = opts.url || defaultUrl
+      var name = opts.name || defaultName
+      var license = opts.license || defaultLicense
+      var licenseFile = opts.file || defaultLicenseFile
 
       /* Ignore the license file itself. */
       if (licenseFile && file.path === licenseFile) {
@@ -140,7 +144,7 @@ function license(options) {
         licenseFile = spdx[license].url
       }
 
-      heading(tree, licenseHeadingRegexp, onheading)
+      heading(tree, headingOptions, onheading)
 
       next()
 

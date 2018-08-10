@@ -83,6 +83,10 @@ If there is no given or found license file, but `options.license` is a known
 and `string`][author-format] format of `author`.  `http://` is prepended if
 `url` starts without HTTP or HTTPS protocol.
 
+###### `options.ignoreFinalDefinitions`
+
+Ignore final definitions otherwise in the section (`boolean`, default: true).
+
 ## Detection
 
 Detection of `package.json` and files in the current working directory is
