@@ -1,5 +1,6 @@
 'use strict'
 
+var parse = require('parse-author')
 var heading = require('mdast-util-heading-range')
 
 module.exports = license
@@ -12,7 +13,6 @@ try {
   path = require('path')
 } catch (err) {}
 
-var authorRegexp = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/
 var licenseRegexp = /^licen[cs]e(?=$|\.)/i
 var licenseHeadingRegexp = /^licen[cs]e$/i
 var http = 'http://'
@@ -49,7 +49,7 @@ function license(options) {
 
     function onpackage(err, buf) {
       var pack = {}
-      var match
+      var author
 
       if (buf) {
         try {
@@ -64,15 +64,10 @@ function license(options) {
         one(err)
       } else {
         defaultLicense = pack.license
-
-        if (typeof pack.author === 'string') {
-          match = authorRegexp.exec(pack.author)
-          defaultName = match[1]
-          defaultUrl = match[3]
-        } else if (pack.author && pack.author.name) {
-          defaultName = pack.author.name
-          defaultUrl = pack.author.url
-        }
+        author = pack.author || {}
+        author = typeof author === 'string' ? parse(author) : author
+        defaultName = author.name
+        defaultUrl = author.url
 
         one()
       }
