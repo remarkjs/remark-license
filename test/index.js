@@ -50,16 +50,17 @@ test('Fixtures', function(t) {
     var output = path.join(filepath, 'output.md')
     var input
     var fail
+    var file
 
     config = exists(config) ? require(config) : {}
     output = exists(output) ? read(output, 'utf-8') : ''
-    input = read(path.join(filepath, 'readme.md'), 'utf-8')
-
+    input = read(path.join(filepath, 'readme.md'))
+    file = {contents: input, cwd: filepath, path: 'readme.md'}
     fail = fixture.indexOf('fail-') === 0 ? fixture.slice(5) : ''
 
     remark()
       .use(license, config)
-      .process({contents: input, cwd: filepath}, function(err, file) {
+      .process(file, function(err, file) {
         if (err) {
           if (!fail) {
             throw err

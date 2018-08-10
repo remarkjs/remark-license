@@ -50,6 +50,8 @@ Now, running `node example` yields:
 Add a license section to heading containing `/^licen[cs]e$/i`.
 Replaces the original content of the section.
 Does nothing when no heading is found.
+Does nothing when the processed file is the license file (such for a license
+heading in `license.md`).
 
 ##### `options`
 

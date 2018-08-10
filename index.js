@@ -110,6 +110,11 @@ function license(options) {
       var license = options.license || defaultLicense
       var licenseFile = options.file || defaultLicenseFile
 
+      /* Ignore the license file itself. */
+      if (licenseFile && file.path === licenseFile) {
+        return next()
+      }
+
       if (!license) {
         return next(
           new Error(
