@@ -2,4 +2,4 @@
 
 ## ![License](some-image.svg)
 
-MIT © Titus Wormer
+MIX © Alpha Bravo

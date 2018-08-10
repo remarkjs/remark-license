@@ -2,4 +2,4 @@
 
 ## License
 
-[MIT](LICENSE) © Titus Wormer
+[MIT](LICENSE) © Alpha Bravo

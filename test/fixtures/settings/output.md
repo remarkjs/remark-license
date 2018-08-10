@@ -2,4 +2,4 @@
 
 ## License
 
-[ISC](LICENSE-ISC) © [Alpha Bravo](http://example.com)
+[CSI](LICENSE-CSI) © [Alpha Bravo](http://example.com)
