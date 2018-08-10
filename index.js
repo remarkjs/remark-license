@@ -12,9 +12,9 @@ try {
   path = require('path')
 } catch (err) {}
 
-var EXPRESSION = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/
-var LICENSE = /^licen[cs]e(?=$|\.)/i
-
+var authorRegexp = /^([^<(]+?)?[ \t]*(?:<([^>(]+?)>)?[ \t]*(?:\(([^)]+?)\)|$)/
+var licenseRegexp = /^licen[cs]e(?=$|\.)/i
+var licenseHeadingRegexp = /^licen[cs]e$/i
 var http = 'http://'
 var https = 'https://'
 
@@ -26,112 +26,156 @@ function license(options) {
 
   return transformer
 
-  function transformer(tree, file) {
-    var settings = {}
-    var pack = {}
-    var entries = []
+  function transformer(tree, file, next) {
     var cwd = file.cwd
-    var url
-    var length
-    var index
+    var left = 2 // Two async operations.
+    var defaultName
+    var defaultUrl
+    var defaultLicense
+    var defaultLicenseFile
 
-    try {
-      pack = require(path.resolve(cwd, 'package.json'))
-    } catch (err) {}
-
-    if (typeof pack.author === 'string') {
-      url = EXPRESSION.exec(pack.author)
-      settings.name = url[1]
-      settings.url = url[3]
-    } else if (pack.author && pack.author.name) {
-      settings.name = pack.author.name
-      settings.url = pack.author.url
+    // Skip package loading if we have all info in `options`.
+    if (options.url && options.name && options.license) {
+      one()
+    } else {
+      fs.readFile(path.resolve(cwd, 'package.json'), onpackage)
     }
 
     if (options.file) {
-      settings.file = options.file
+      one()
     } else {
-      try {
-        entries = fs.readdirSync(cwd)
-      } catch (err) {
-        /* Empty */
-      }
+      fs.readdir(cwd, onfiles)
+    }
 
-      length = entries.length
-      index = -1
+    function onpackage(err, buf) {
+      var pack = {}
+      var match
 
-      while (++index < length) {
-        if (LICENSE.test(entries[index])) {
-          settings.file = entries[index]
-          break
+      if (buf) {
+        try {
+          pack = JSON.parse(buf)
+        } catch (err) {
+          return one(err)
         }
       }
-    }
 
-    if (options.url) {
-      settings.url = options.url
-    }
-
-    if (options.name) {
-      settings.name = options.name
-    }
-
-    settings.license = options.license || pack.license
-
-    if (!settings.license) {
-      throw new Error(
-        'Missing required `license` in settings.\n' +
-          'Either add a `license` to a `package.json` file\n' +
-          'or pass it into `remark-license`'
-      )
-    }
-
-    if (!settings.name) {
-      throw new Error(
-        'Missing required `name` in settings.\n' +
-          'Either add an `author` to a `package.json` file\n' +
-          'or pass it into `remark-license`'
-      )
-    }
-
-    heading(tree, /^licen[cs]e$/i, onheading)
-
-    function onheading(start, nodes, end) {
-      var children = []
-      var node = {type: 'paragraph', children: children}
-      var url
-      var parent
-
-      if (settings.file) {
-        parent = {type: 'link', title: null, url: settings.file, children: []}
-        children.push(parent)
+      /* istanbul ignore if - hard to test. */
+      if (err && err.code !== 'ENOENT') {
+        one(err)
       } else {
-        parent = node
-      }
+        defaultLicense = pack.license
 
-      parent.children.push({type: 'text', value: settings.license})
-
-      children.push({type: 'text', value: ' © '})
-
-      if (settings.url) {
-        url = settings.url
-
-        if (
-          url.slice(0, http.length) !== http &&
-          url.slice(0, https.length) !== https
-        ) {
-          url = http + url
+        if (typeof pack.author === 'string') {
+          match = authorRegexp.exec(pack.author)
+          defaultName = match[1]
+          defaultUrl = match[3]
+        } else if (pack.author && pack.author.name) {
+          defaultName = pack.author.name
+          defaultUrl = pack.author.url
         }
 
-        parent = {type: 'link', title: null, url: url, children: []}
-        children.push(parent)
+        one()
+      }
+    }
+
+    function onfiles(err, files) {
+      var length
+      var index
+
+      /* istanbul ignore if - hard to test. */
+      if (err) {
+        one(err)
       } else {
-        parent = node
+        length = files.length
+        index = -1
+
+        while (++index < length) {
+          if (licenseRegexp.test(files[index])) {
+            defaultLicenseFile = files[index]
+            break
+          }
+        }
+
+        one()
+      }
+    }
+
+    function one(err) {
+      if (err) {
+        next(err)
+        left = Infinity
+      } else if (--left === 0) {
+        done()
+      }
+    }
+
+    function done() {
+      var url = options.url || defaultUrl
+      var name = options.name || defaultName
+      var license = options.license || defaultLicense
+      var licenseFile = options.file || defaultLicenseFile
+
+      if (!license) {
+        return next(
+          new Error(
+            'Missing required `license` in settings.\n' +
+              'Either add a `license` to a `package.json` file\n' +
+              'or pass it into `remark-license`'
+          )
+        )
       }
 
-      parent.children.push({type: 'text', value: settings.name})
+      if (!name) {
+        return next(
+          new Error(
+            'Missing required `name` in settings.\n' +
+              'Either add an `author` to a `package.json` file\n' +
+              'or pass it into `remark-license`'
+          )
+        )
+      }
 
-      return [start, node, end]
+      heading(tree, licenseHeadingRegexp, onheading)
+
+      next()
+
+      function onheading(start, nodes, end) {
+        var children = []
+        var node = {type: 'paragraph', children: children}
+        var link
+        var parent
+
+        if (licenseFile) {
+          parent = {type: 'link', title: null, url: licenseFile, children: []}
+          children.push(parent)
+        } else {
+          parent = node
+        }
+
+        parent.children.push({type: 'text', value: license})
+
+        children.push({type: 'text', value: ' © '})
+
+        if (url) {
+          if (
+            url.slice(0, http.length) !== http &&
+            url.slice(0, https.length) !== https
+          ) {
+            link = http + url
+          } else {
+            link = url
+          }
+
+          parent = {type: 'link', title: null, url: link, children: []}
+          children.push(parent)
+        } else {
+          parent = node
+        }
+
+        parent.children.push({type: 'text', value: name})
+
+        return [start, node, end]
+      }
     }
   }
 }

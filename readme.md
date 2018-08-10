@@ -1,6 +1,6 @@
 # remark-license [![Build Status][build-badge]][build-status] [![Coverage Status][coverage-badge]][coverage-status] [![Chat][chat-badge]][chat]
 
-Add a [license][sec] section to a README with [**remark**][remark].
+Add a [license][section] section to a README with [**remark**][remark].
 
 ## Installation
 
@@ -23,16 +23,16 @@ Something nondescript.
 And our script, `example.js`, looks as follows:
 
 ```javascript
-var fs = require('fs');
-var remark = require('remark');
-var license = require('remark-license');
+var fs = require('fs')
+var remark = require('remark')
+var license = require('remark-license')
 
 remark()
   .use(license)
-  .process(fs.readFileSync('example.md'), function (err, file) {
-    if (err) throw err;
-    console.log(String(file));
-  });
+  .process(fs.readFileSync('example.md'), function(err, file) {
+    if (err) throw err
+    console.log(String(file))
+  })
 ```
 
 Now, running `node example` yields:
@@ -40,7 +40,7 @@ Now, running `node example` yields:
 ```markdown
 ## License
 
-[MIT](LICENSE) © [Titus Wormer](http://remarkjs.com)
+[MIT](LICENSE) © [Titus Wormer](http://wooorm.com)
 ```
 
 ## API
@@ -88,20 +88,23 @@ If you want to set the cwd yourself (the default is `process.cwd()`), you can
 pass in a `vfile` or [`vfile` options][vfile-options] to `.process` like so:
 
 ```js
-var fs = require('fs');
-var path = require('path');
-var remark = require('remark');
-var license = require('remark-license');
+var fs = require('fs')
+var path = require('path')
+var remark = require('remark')
+var license = require('remark-license')
 
 remark()
   .use(license)
-  .process({
-    cwd: path.join('.', 'some', 'path', 'to', 'a', 'directory'),
-    contents: fs.readFileSync('example.md')
-  }, function (err, file) {
-    if (err) throw err;
-    console.log(String(file));
-  });
+  .process(
+    {
+      cwd: path.join('.', 'some', 'path', 'to', 'a', 'directory'),
+      contents: fs.readFileSync('example.md')
+    },
+    function(err, file) {
+      if (err) throw err
+      console.log(String(file))
+    }
+  )
 ```
 
 ## Related
@@ -157,7 +160,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [vfile-options]: https://github.com/vfile/vfile#vfileoptions
 
-[sec]: #license
+[section]: #license
 
 [detected]: #detection
 
