@@ -1,6 +1,7 @@
 'use strict'
 
 var parse = require('parse-author')
+var spdx = require('spdx-license-list')
 var heading = require('mdast-util-heading-range')
 
 module.exports = license
@@ -133,6 +134,10 @@ function license(options) {
               'or pass it into `remark-license`'
           )
         )
+      }
+
+      if (!licenseFile && license in spdx) {
+        licenseFile = spdx[license].url
       }
 
       heading(tree, licenseHeadingRegexp, onheading)

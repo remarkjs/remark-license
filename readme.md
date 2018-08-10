@@ -73,6 +73,8 @@ license objects are not supported.  _Throws when neither given nor detected._
 `string`, optional — File-name of license file.  [Detected][] from the files
 in the current working directory, in which case the first file matching
 `/^licen[cs]e(?=$|\.)/i` is used.
+If there is no given or found license file, but `options.license` is a known
+[SPDX identifier][spdx], the URL to the license on `spdx.org` is used.
 
 ###### `options.url`
 
