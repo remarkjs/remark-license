@@ -12,7 +12,7 @@ var path
 try {
   fs = require('fs')
   path = require('path')
-} catch (err) {}
+} catch (error) {}
 
 var licenseRegexp = /^licen[cs]e(?=$|\.)/i
 var licenseHeadingRegexp = /^licen[cs]e$/i
@@ -59,8 +59,8 @@ function license(options) {
       if (buf) {
         try {
           pack = JSON.parse(buf)
-        } catch (err) {
-          return one(err)
+        } catch (error) {
+          return one(error)
         }
       }
 
