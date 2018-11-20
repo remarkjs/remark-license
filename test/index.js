@@ -31,7 +31,7 @@ test('current working directory', function(t) {
         [err, String(file)],
         [
           null,
-          '# License\n\n[MIT](license) © [Titus Wormer](http://wooorm.com)\n'
+          '# License\n\n[MIT](license) © [Titus Wormer](https://wooorm.com)\n'
         ]
       )
     })

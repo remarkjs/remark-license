@@ -40,7 +40,7 @@ Now, running `node example` yields:
 ```markdown
 ## License
 
-[MIT](LICENSE) © [Titus Wormer](http://wooorm.com)
+[MIT](LICENSE) © [Titus Wormer](https://wooorm.com)
 ```
 
 ## API
@@ -154,7 +154,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [license]: license
 
-[author]: http://wooorm.com
+[author]: https://wooorm.com
 
 [npm]: https://docs.npmjs.com/cli/install
 
