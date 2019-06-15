@@ -1,12 +1,15 @@
 {
   "name": "remark-license",
   "version": "5.0.1",
-  "description": "Add a license section to your README",
+  "description": "remark plugin to add a license section to your readme",
   "license": "MIT",
   "keywords": [
+    "unifie",
     "remark",
-    "text",
+    "plugin",
+    "mdast",
     "markdown",
+    "text",
     "plain",
     "text",
     "license",
@@ -17,7 +20,8 @@
   "bugs": "https://github.com/remarkjs/remark-license/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
   "contributors": [
-    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+    "Ben Briggs <beneb.info@gmail.com> (http://beneb.info)"
   ],
   "files": [
     "index.js"
