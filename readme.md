@@ -66,14 +66,14 @@ heading in `license.md`).
 
 `string`, optional — License holder.  [Detected][] from the `package.json` in
 the current working directory, supporting both [`object` and
-`string`][author-format] format of `author`.  _Throws when neither given nor
-detected._
+`string`][author-format] format of `author`.  *Throws when neither given nor
+detected.*
 
 ###### `options.license`
 
 `string`, optional — [SPDX][] identifier.  [Detected][] from the `license`
 field in the `package.json` in the current working directory.  Deprecated
-license objects are not supported.  _Throws when neither given nor detected._
+license objects are not supported.  *Throws when neither given nor detected.*
 
 ###### `options.file`
 
