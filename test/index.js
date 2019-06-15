@@ -4,12 +4,14 @@ var fs = require('fs')
 var path = require('path')
 var test = require('tape')
 var remark = require('remark')
+var hidden = require('is-hidden')
+var negate = require('negate')
 var license = require('..')
 
 var read = fs.readFileSync
 var exists = fs.existsSync
 
-var ROOT = path.join(__dirname, 'fixtures')
+var root = path.join(__dirname, 'fixtures')
 
 test('license()', function(t) {
   t.equal(typeof license, 'function', 'should be a function')
@@ -38,14 +40,14 @@ test('current working directory', function(t) {
 })
 
 test('Fixtures', function(t) {
-  var paths = fs.readdirSync(ROOT).filter(filter)
+  var paths = fs.readdirSync(root).filter(negate(hidden))
 
   t.plan(paths.length)
 
   paths.forEach(each)
 
   function each(fixture) {
-    var filepath = path.join(ROOT, fixture)
+    var filepath = path.join(root, fixture)
     var config = path.join(filepath, 'config.json')
     var output = path.join(filepath, 'output.md')
     var input
@@ -79,7 +81,3 @@ test('Fixtures', function(t) {
       })
   }
 })
-
-function filter(filepath) {
-  return filepath.indexOf('.') !== 0
-}
