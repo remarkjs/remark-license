@@ -3,21 +3,22 @@
 [![Build][build-badge]][build]
 [![Coverage][coverage-badge]][coverage]
 [![Downloads][downloads-badge]][downloads]
-[![Chat][chat-badge]][chat]
+[![Size][size-badge]][size]
 [![Sponsors][sponsors-badge]][collective]
 [![Backers][backers-badge]][collective]
+[![Chat][chat-badge]][chat]
 
-Add a [license][section] section to a README with [**remark**][remark].
+[**remark**][remark] plugin to add a [license][section] section to your readme.
 
-## Installation
+## Install
 
 [npm][]:
 
-```bash
+```sh
 npm install remark-license
 ```
 
-## Usage
+## Use
 
 Say we have the following file, `example.md`:
 
@@ -29,7 +30,7 @@ Something nondescript.
 
 And our script, `example.js`, looks as follows:
 
-```javascript
+```js
 var fs = require('fs')
 var remark = require('remark')
 var license = require('remark-license')
@@ -52,10 +53,11 @@ Now, running `node example` yields:
 
 ## API
 
-### `remark.use(license[, options])`
+### `remark().use(license[, options])`
 
-Add a license section to heading containing `/^licen[cs]e$/i`.
-Replaces the original content of the section.
+Plugin to add a license section to your readme.
+Adds content to the heading containing `/^licen[cs]e$/i`.
+Replaces the original content of that section.
 Does nothing when no heading is found.
 Does nothing when the processed file is the license file (such for a license
 heading in `license.md`).
@@ -64,31 +66,33 @@ heading in `license.md`).
 
 ###### `options.name`
 
-`string`, optional — License holder.  [Detected][] from the `package.json` in
-the current working directory, supporting both [`object` and
-`string`][author-format] format of `author`.  *Throws when neither given nor
-detected.*
+License holder (`string`, optional).
+[Detected][] from the `package.json` in the current working directory,
+supporting both [`object` and `string`][author-format] format of `author`.
+*Throws when neither given nor detected.*
 
 ###### `options.license`
 
-`string`, optional — [SPDX][] identifier.  [Detected][] from the `license`
-field in the `package.json` in the current working directory.  Deprecated
-license objects are not supported.  *Throws when neither given nor detected.*
+[SPDX][] identifier (`string`, optional).
+[Detected][] from the `license` field in the `package.json` in the current
+working directory.
+Deprecated license objects are not supported.
+*Throws when neither given nor detected.*
 
 ###### `options.file`
 
-`string`, optional — File-name of license file.  [Detected][] from the files
-in the current working directory, in which case the first file matching
-`/^licen[cs]e(?=$|\.)/i` is used.
+File name of license file (`string`, optional).
+[Detected][] from the files in the current working directory, in which case the
+first file matching `/^licen[cs]e(?=$|\.)/i` is used.
 If there is no given or found license file, but `options.license` is a known
 [SPDX identifier][spdx], the URL to the license on `spdx.org` is used.
 
 ###### `options.url`
 
-`string`, optional — URL to license holder.  [Detected][] from the
-`package.json` in the current working directory, supporting both [`object`
-and `string`][author-format] format of `author`.  `http://` is prepended if
-`url` starts without HTTP or HTTPS protocol.
+URL to license holder (`string`, optional).
+[Detected][] from the `package.json` in the current working directory,
+supporting both [`object` and `string`][author-format] format of `author`.
+`http://` is prepended if `url` starts without HTTP or HTTPS protocol.
 
 ###### `options.ignoreFinalDefinitions`
 
@@ -135,11 +139,13 @@ remark()
 
 ## Contribute
 
-See [`contributing.md` in `remarkjs/remark`][contributing] for ways to get
-started.
+See [`contributing.md`][contributing] in [`remarkjs/.github`][health] for ways
+to get started.
+See [`support.md`][support] for ways to get help.
 
-This organisation has a [Code of Conduct][coc].  By interacting with this
-repository, organisation, or community you agree to abide by its terms.
+This project has a [Code of Conduct][coc].
+By interacting with this repository, organisation, or community you agree to
+abide by its terms.
 
 ## License
 
@@ -147,7 +153,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/remarkjs/remark-license.svg
+[build-badge]: https://img.shields.io/travis/remarkjs/remark-license/master.svg
 
 [build]: https://travis-ci.org/remarkjs/remark-license
 
@@ -159,9 +165,9 @@ repository, organisation, or community you agree to abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/remark-license
 
-[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+[size-badge]: https://img.shields.io/bundlephobia/minzip/remark-license.svg
 
-[chat]: https://spectrum.chat/unified/remark
+[size]: https://bundlephobia.com/result?p=remark-license
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -169,11 +175,23 @@ repository, organisation, or community you agree to abide by its terms.
 
 [collective]: https://opencollective.com/unified
 
+[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+
+[chat]: https://spectrum.chat/unified/remark
+
+[npm]: https://docs.npmjs.com/cli/install
+
+[health]: https://github.com/remarkjs/.github
+
+[contributing]: https://github.com/remarkjs/.github/blob/master/contributing.md
+
+[support]: https://github.com/remarkjs/.github/blob/master/support.md
+
+[coc]: https://github.com/remarkjs/.github/blob/master/code-of-conduct.md
+
 [license]: license
 
 [author]: https://wooorm.com
-
-[npm]: https://docs.npmjs.com/cli/install
 
 [remark]: https://github.com/remarkjs/remark
 
@@ -188,7 +206,3 @@ repository, organisation, or community you agree to abide by its terms.
 [section]: #license
 
 [detected]: #detection
-
-[contributing]: https://github.com/remarkjs/remark/blob/master/contributing.md
-
-[coc]: https://github.com/remarkjs/remark/blob/master/code-of-conduct.md
