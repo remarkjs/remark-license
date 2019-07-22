@@ -126,6 +126,16 @@ remark()
   )
 ```
 
+## Security
+
+`options.url` (or `author.url` in `package.json`) is used and injected into the
+tree when it’s given or found.
+This could open you up to a [cross-site scripting (XSS)][xss] attack if you pass
+user provided content in or store user provided content in `package.json`.
+
+This may become a problem if the Markdown later transformed to
+[**rehype**][rehype] ([**hast**][hast]) or opened in an unsafe Markdown viewer.
+
 ## Related
 
 *   [`remark-collapse`](https://github.com/Rokt33r/remark-collapse)
@@ -206,3 +216,9 @@ abide by its terms.
 [section]: #license
 
 [detected]: #detection
+
+[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[rehype]: https://github.com/rehypejs/rehype
+
+[hast]: https://github.com/syntax-tree/hast
