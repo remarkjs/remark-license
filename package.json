@@ -18,6 +18,10 @@
   ],
   "repository": "remarkjs/remark-license",
   "bugs": "https://github.com/remarkjs/remark-license/issues",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/unified"
+  },
   "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
