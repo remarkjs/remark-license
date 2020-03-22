@@ -12,7 +12,7 @@ var path
 try {
   fs = require('fs')
   path = require('path')
-} catch (error) {}
+} catch (_) {}
 
 var licenseRegexp = /^licen[cs]e(?=$|\.)/i
 var licenseHeadingRegexp = /^licen[cs]e$/i
@@ -21,8 +21,8 @@ var https = 'https://'
 
 /* Add a license section. */
 function license(options) {
-  var opts = options || {}
-  var finals = opts.ignoreFinalDefinitions
+  var settings = options || {}
+  var finals = settings.ignoreFinalDefinitions
   var headingOptions = {
     ignoreFinalDefinitions:
       finals === undefined || finals === null ? true : finals,
@@ -40,13 +40,13 @@ function license(options) {
     var defaultLicenseFile
 
     // Skip package loading if we have all info in `options`.
-    if (opts.url && opts.name && opts.license) {
+    if (settings.url && settings.name && settings.license) {
       one()
     } else {
       fs.readFile(path.resolve(cwd, 'package.json'), onpackage)
     }
 
-    if (opts.file) {
+    if (settings.file) {
       one()
     } else {
       fs.readdir(cwd, onfiles)
@@ -110,10 +110,10 @@ function license(options) {
     }
 
     function done() {
-      var url = opts.url || defaultUrl
-      var name = opts.name || defaultName
-      var license = opts.license || defaultLicense
-      var licenseFile = opts.file || defaultLicenseFile
+      var url = settings.url || defaultUrl
+      var name = settings.name || defaultName
+      var license = settings.license || defaultLicense
+      var licenseFile = settings.file || defaultLicenseFile
 
       /* Ignore the license file itself. */
       if (licenseFile && file.path === licenseFile) {

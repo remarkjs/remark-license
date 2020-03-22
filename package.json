@@ -40,17 +40,18 @@
     "browserify": "^16.0.0",
     "is-hidden": "^1.0.0",
     "negate": "^1.0.0",
-    "nyc": "^14.0.0",
-    "prettier": "^1.0.0",
+    "nyc": "^15.0.0",
+    "prettier": "^2.0.0",
     "remark": "^11.0.0",
     "remark-cli": "^7.0.0",
     "remark-preset-wooorm": "^6.0.0",
     "tape": "^4.0.0",
     "tinyify": "^2.0.0",
-    "xo": "^0.24.0"
+    "xo": "^0.28.0"
   },
   "scripts": {
-    "format": "remark *.md -qfo && prettier --write \"**/*.js\" && xo --fix",
+    "#": "xo is currently broken (it tries to load broken `package.json`s)",
+    "format": "remark *.md -qfo && prettier --write \"**/*.js\" # && xo --fix",
     "build-bundle": "browserify . -s remarkLicense > remark-license.js",
     "build-mangle": "browserify . -s remarkLicense -p tinyify > remark-license.min.js",
     "build": "npm run build-bundle && npm run build-mangle",

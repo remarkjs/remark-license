@@ -13,22 +13,22 @@ var exists = fs.existsSync
 
 var root = path.join(__dirname, 'fixtures')
 
-test('license()', function(t) {
+test('license()', function (t) {
   t.equal(typeof license, 'function', 'should be a function')
 
-  t.doesNotThrow(function() {
+  t.doesNotThrow(function () {
     license.call(remark())
   }, 'should not throw if not passed options')
 
   t.end()
 })
 
-test('current working directory', function(t) {
+test('current working directory', function (t) {
   t.plan(1)
 
   remark()
     .use(license)
-    .process('# License', function(err, file) {
+    .process('# License', function (err, file) {
       t.deepEqual(
         [err, String(file)],
         [
@@ -39,7 +39,7 @@ test('current working directory', function(t) {
     })
 })
 
-test('Fixtures', function(t) {
+test('Fixtures', function (t) {
   var paths = fs.readdirSync(root).filter(negate(hidden))
 
   t.plan(paths.length)
@@ -62,7 +62,7 @@ test('Fixtures', function(t) {
 
     remark()
       .use(license, config)
-      .process(file, function(err, file) {
+      .process(file, function (err, file) {
         if (err) {
           if (!fail) {
             throw err
