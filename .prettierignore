@@ -1,3 +1,5 @@
 coverage/
 remark-license.js
 remark-license.min.js
+*.json
+*.md
