@@ -169,9 +169,9 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/remarkjs/remark-license/main.svg
+[build-badge]: https://github.com/remarkjs/remark-license/workflows/main/badge.svg
 
-[build]: https://travis-ci.org/remarkjs/remark-license
+[build]: https://github.com/remarkjs/remark-license/actions
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/remarkjs/remark-license.svg
 
