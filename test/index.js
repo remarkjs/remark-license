@@ -49,12 +49,17 @@ test('Fixtures', function (t) {
   function each(fixture) {
     var filepath = path.join(root, fixture)
     var config = path.join(filepath, 'config.json')
+    var jsConfig = path.join(filepath, 'config.js')
     var output = path.join(filepath, 'output.md')
     var input
     var fail
     var file
 
-    config = exists(config) ? require(config) : {}
+    config = exists(config)
+      ? require(config)
+      : exists(jsConfig)
+      ? require(jsConfig)
+      : {}
     output = exists(output) ? read(output, 'utf-8') : ''
     input = read(path.join(filepath, 'readme.md'))
     file = {contents: input, cwd: filepath, path: 'readme.md'}
