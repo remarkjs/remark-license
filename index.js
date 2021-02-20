@@ -23,10 +23,11 @@ var https = 'https://'
 function license(options) {
   var settings = options || {}
   var finals = settings.ignoreFinalDefinitions
+  var test = settings.match || licenseHeadingRegexp
   var headingOptions = {
     ignoreFinalDefinitions:
       finals === undefined || finals === null ? true : finals,
-    test: licenseHeadingRegexp
+    test
   }
 
   return transformer
