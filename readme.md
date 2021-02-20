@@ -62,7 +62,8 @@ Now, running `node example` yields:
 ### `remark().use(license[, options])`
 
 Plugin to add a license section to your readme.
-Adds content to the heading containing `/^licen[cs]e$/i`.
+Adds content to the heading matching `/^licen[cs]e$/i` or your own regular
+expression through `options.match`.
 Replaces the original content of that section.
 Does nothing when no heading is found.
 Does nothing when the processed file is the license file (such for a license
@@ -103,6 +104,10 @@ supporting both [`object` and `string`][author-format] format of `author`.
 ###### `options.ignoreFinalDefinitions`
 
 Ignore final definitions otherwise in the section (`boolean`, default: true).
+
+###### `options.match`
+
+Regular expression to match license heading (`regexp`, default: `/^licen[cs]e$/i`).
 
 ## Detection
 
