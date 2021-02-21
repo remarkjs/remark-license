@@ -23,14 +23,7 @@ var https = 'https://'
 function license(options) {
   var settings = options || {}
   var finals = settings.ignoreFinalDefinitions
-  var test = licenseHeadingRegexp
-
-  if (settings.heading) {
-    test = settings.heading
-    if (typeof settings.heading === 'string') {
-      test = new RegExp('^(' + settings.heading + ')$', 'i')
-    }
-  }
+  var test = settings.heading || licenseHeadingRegexp
 
   var headingOptions = {
     ignoreFinalDefinitions:
