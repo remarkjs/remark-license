@@ -28,7 +28,7 @@ function license(options) {
   var headingOptions = {
     ignoreFinalDefinitions:
       finals === undefined || finals === null ? true : finals,
-    test
+    test: test
   }
 
   return transformer
