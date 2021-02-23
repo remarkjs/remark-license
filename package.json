@@ -47,11 +47,10 @@
     "remark-preset-wooorm": "^8.0.0",
     "tape": "^5.0.0",
     "tinyify": "^3.0.0",
-    "xo": "^0.37.0"
+    "xo": "^0.38.0"
   },
   "scripts": {
-    "#": "xo is currently broken (it tries to load broken `package.json`s)",
-    "format": "remark . -qfo --ignore-pattern test/ && prettier . -w --loglevel warn # && xo --fix",
+    "format": "remark . -qfo --ignore-pattern test/ && prettier . -w --loglevel warn && xo --fix",
     "build-bundle": "browserify . -s remarkLicense > remark-license.js",
     "build-mangle": "browserify . -s remarkLicense -p tinyify > remark-license.min.js",
     "build": "npm run build-bundle && npm run build-mangle",
@@ -76,6 +75,10 @@
   "xo": {
     "prettier": true,
     "esnext": false,
+    "rules": {
+      "unicorn/prefer-number-properties": "off",
+      "unicorn/prefer-optional-catch-binding": "off"
+    },
     "ignores": [
       "remark-license.js"
     ]

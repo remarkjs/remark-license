@@ -8,19 +8,15 @@ var hidden = require('is-hidden')
 var negate = require('negate')
 var license = require('..')
 
-var read = fs.readFileSync
-var exists = fs.existsSync
-
 var root = path.join(__dirname, 'fixtures')
 
-test('license()', function (t) {
-  t.equal(typeof license, 'function', 'should be a function')
+fs.writeFileSync(
+  path.join(root, 'fail-unexpected-end-of-json', 'package.json'),
+  '{\n'
+)
 
-  t.doesNotThrow(function () {
-    license.call(remark())
-  }, 'should not throw if not passed options')
-
-  t.end()
+process.on('exit', () => {
+  fs.unlinkSync(path.join(root, 'fail-unexpected-end-of-json', 'package.json'))
 })
 
 test('current working directory', function (t) {
@@ -28,9 +24,9 @@ test('current working directory', function (t) {
 
   remark()
     .use(license)
-    .process('# License', function (err, file) {
+    .process('# License', function (error, file) {
       t.deepEqual(
-        [err, String(file)],
+        [error, String(file)],
         [
           null,
           '# License\n\n[MIT](license) © [Titus Wormer](https://wooorm.com)\n'
@@ -40,49 +36,58 @@ test('current working directory', function (t) {
 })
 
 test('Fixtures', function (t) {
-  var paths = fs.readdirSync(root).filter(negate(hidden))
+  var fixtures = fs.readdirSync(root).filter(negate(hidden))
+  var index = -1
 
-  t.plan(paths.length)
+  t.plan(fixtures.length)
 
-  paths.forEach(each)
+  while (++index < fixtures.length) {
+    one(fixtures[index])
+  }
 
-  function each(fixture) {
-    var filepath = path.join(root, fixture)
-    var config = path.join(filepath, 'config.json')
-    var jsConfig = path.join(filepath, 'config.js')
-    var output = path.join(filepath, 'output.md')
-    var input
-    var fail
-    var file
+  function one(name) {
+    var config
+    var output
 
-    config = exists(config)
-      ? require(config)
-      : exists(jsConfig)
-      ? require(jsConfig)
-      : {}
-    output = exists(output) ? read(output, 'utf-8') : ''
-    input = read(path.join(filepath, 'readme.md'))
-    file = {contents: input, cwd: filepath, path: 'readme.md'}
-    fail = fixture.indexOf('fail-') === 0 ? fixture.slice(5) : ''
+    try {
+      config = JSON.parse(fs.readFileSync(path.join(root, name, 'config.json')))
+    } catch (_) {
+      try {
+        config = require(path.join(root, name, 'config.js'))
+      } catch (_) {}
+    }
+
+    try {
+      output = String(fs.readFileSync(path.join(root, name, 'output.md')))
+    } catch (_) {
+      output = ''
+    }
 
     remark()
       .use(license, config)
-      .process(file, function (err, file) {
-        if (err) {
-          if (!fail) {
-            throw err
+      .process(
+        {
+          contents: fs.readFileSync(path.join(root, name, 'readme.md')),
+          cwd: path.join(root, name),
+          path: 'readme.md'
+        },
+        function (error, file) {
+          var expression
+
+          if (name.indexOf('fail-') === 0) {
+            expression = new RegExp(name.slice(5).replace(/-/g, ' '), 'i')
+
+            t.equal(
+              expression.test(String(error).replace(/`/g, '')),
+              true,
+              'should fail on `' + name + '` matching `' + expression + '`'
+            )
+          } else if (error) {
+            throw error
+          } else {
+            t.equal(String(file), output, 'should work on `' + name + '`')
           }
-
-          fail = new RegExp(fail.replace(/-/g, ' '), 'i')
-
-          t.equal(
-            fail.test(String(err).replace(/`/g, '')),
-            true,
-            'should fail on `' + fixture + '` matching `' + fail + '`'
-          )
-        } else {
-          t.equal(String(file), output, 'should work on `' + fixture + '`')
         }
-      })
+      )
   }
 })

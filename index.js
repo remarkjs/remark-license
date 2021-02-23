@@ -54,7 +54,7 @@ function license(options) {
       fs.readdir(cwd, onfiles)
     }
 
-    function onpackage(err, buf) {
+    function onpackage(error, buf) {
       var pack = {}
       var author
 
@@ -67,8 +67,8 @@ function license(options) {
       }
 
       /* istanbul ignore if - hard to test. */
-      if (err && err.code !== 'ENOENT') {
-        one(err)
+      if (error && error.code !== 'ENOENT') {
+        one(error)
       } else {
         defaultLicense = pack.license
         author = pack.author || {}
@@ -80,13 +80,13 @@ function license(options) {
       }
     }
 
-    function onfiles(err, files) {
+    function onfiles(error, files) {
       var length
       var index
 
       /* istanbul ignore if - hard to test. */
-      if (err) {
-        one(err)
+      if (error) {
+        one(error)
       } else {
         length = files.length
         index = -1
@@ -102,9 +102,9 @@ function license(options) {
       }
     }
 
-    function one(err) {
-      if (err) {
-        next(err)
+    function one(error) {
+      if (error) {
+        next(error)
         left = Infinity
       } else if (--left === 0) {
         done()
