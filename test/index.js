@@ -1,5 +1,10 @@
+/**
+ * @typedef {import('../index.js').Options} Options
+ */
+
 import fs from 'fs'
 import path from 'path'
+import {URL} from 'url'
 import test from 'tape'
 import {remark} from 'remark'
 import {isHidden} from 'is-hidden'
@@ -25,20 +30,26 @@ test('Fixtures', async (t) => {
 
   while (++index < fixtures.length) {
     const name = fixtures[index]
+    /** @type {Options|undefined} */
     let config
+    /** @type {string} */
     let output
 
     if (isHidden(name)) continue
 
     try {
-      config = JSON.parse(fs.readFileSync(path.join(root, name, 'config.json')))
+      config = JSON.parse(
+        String(fs.readFileSync(path.join(root, name, 'config.json')))
+      )
     } catch {
       try {
         config = (
           await import(
-            new URL(
-              path.join('.', 'fixtures', name, 'config.js'),
-              import.meta.url
+            String(
+              new URL(
+                path.join('.', 'fixtures', name, 'config.js'),
+                import.meta.url
+              )
             )
           )
         ).default

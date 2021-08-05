@@ -114,8 +114,8 @@ Ignore final definitions otherwise in the section (`boolean`, default: true).
 
 ###### `options.heading`
 
-Heading to look for
-(`string` (case-insensitive) or `RegExp`, default: `/^licen[cs]e$/i`).
+Heading to look for (`string` (case-insensitive) or `RegExp`, default:
+`/^licen[cs]e$/i`).
 
 ## Detection
 
