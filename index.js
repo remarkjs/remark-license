@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import parse from 'parse-author'
 import spdx from 'spdx-license-list'
-import heading from 'mdast-util-heading-range'
+import {headingRange} from 'mdast-util-heading-range'
 
 var licenseRegexp = /^licen[cs]e(?=$|\.)/i
 var licenseHeadingRegexp = /^licen[cs]e$/i
@@ -138,7 +138,7 @@ export default function remarkLicense(options) {
         licenseFile = spdx[license].url
       }
 
-      heading(tree, headingOptions, onheading)
+      headingRange(tree, headingOptions, onheading)
 
       next()
 

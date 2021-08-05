@@ -35,7 +35,7 @@
     "index.js"
   ],
   "dependencies": {
-    "mdast-util-heading-range": "^2.0.0",
+    "mdast-util-heading-range": "^3.0.0",
     "parse-author": "^2.0.0",
     "spdx-license-list": "^6.0.0"
   },
