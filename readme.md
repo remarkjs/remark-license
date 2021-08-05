@@ -18,6 +18,9 @@ No change is needed: it works exactly the same now as it did before!
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -34,17 +37,19 @@ Say we have the following file, `example.md`:
 Something nondescript.
 ```
 
-And our script, `example.js`, looks as follows:
+And our module, `example.js`, looks as follows:
 
 ```js
-var fs = require('fs')
-var remark = require('remark')
-var license = require('remark-license')
+import fs from 'node:fs'
+import {remark} from 'remark'
+import remarkLicense from 'remark-license'
+
+const buf = fs.readFileSync('example.md')
 
 remark()
-  .use(license)
-  .process(fs.readFileSync('example.md'), function(err, file) {
-    if (err) throw err
+  .use(remarkLicense)
+  .process(buf)
+  .then((file) => {
     console.log(String(file))
   })
 ```
@@ -59,7 +64,10 @@ Now, running `node example` yields:
 
 ## API
 
-### `remark().use(license[, options])`
+This package exports no identifiers.
+The default export is `remarkLicense`.
+
+### `unified().use(remarkLicense[, options])`
 
 Plugin to add a license section to your readme.
 Adds content to the heading matching `/^licen[cs]e$/i` or `options.heading`.
