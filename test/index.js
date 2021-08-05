@@ -2,9 +2,10 @@
  * @typedef {import('../index.js').Options} Options
  */
 
-import fs from 'fs'
-import path from 'path'
-import {URL} from 'url'
+import fs from 'node:fs'
+import path from 'node:path'
+import {URL} from 'node:url'
+import process from 'node:process'
 import test from 'tape'
 import {remark} from 'remark'
 import {isHidden} from 'is-hidden'

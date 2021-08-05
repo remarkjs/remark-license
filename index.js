@@ -37,8 +37,8 @@
  *   Default: `/^licen[cs]e$/i`.
  */
 
-import {promises as fs} from 'fs'
-import path from 'path'
+import {promises as fs} from 'node:fs'
+import path from 'node:path'
 import parse from 'parse-author'
 import spdx from 'spdx-license-list'
 import {read} from 'to-vfile'
