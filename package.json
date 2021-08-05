@@ -28,6 +28,9 @@
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
     "Ben Briggs <beneb.info@gmail.com> (http://beneb.info)"
   ],
+  "sideEffects": false,
+  "type": "module",
+  "main": "index.js",
   "files": [
     "index.js"
   ],
@@ -65,9 +68,21 @@
     "prettier": true,
     "esnext": false,
     "rules": {
+      "no-var": "off",
+      "prefer-arrow-callback": "off",
       "unicorn/prefer-number-properties": "off",
       "unicorn/prefer-optional-catch-binding": "off"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "test/**/*.js"
+        ],
+        "rules": {
+          "no-await-in-loop": "off"
+        }
+      }
+    ]
   },
   "remarkConfig": {
     "plugins": [

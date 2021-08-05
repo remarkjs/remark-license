@@ -1,14 +1,12 @@
-'use strict'
+import fs from 'fs'
+import path from 'path'
+import test from 'tape'
+import remark from 'remark'
+import hidden from 'is-hidden'
+import negate from 'negate'
+import license from '../index.js'
 
-var fs = require('fs')
-var path = require('path')
-var test = require('tape')
-var remark = require('remark')
-var hidden = require('is-hidden')
-var negate = require('negate')
-var license = require('..')
-
-var root = path.join(__dirname, 'fixtures')
+var root = path.join('test', 'fixtures')
 
 fs.writeFileSync(
   path.join(root, 'fail-unexpected-end-of-json', 'package.json'),
@@ -35,25 +33,27 @@ test('current working directory', function (t) {
     })
 })
 
-test('Fixtures', function (t) {
+test('Fixtures', async function (t) {
   var fixtures = fs.readdirSync(root).filter(negate(hidden))
   var index = -1
 
-  t.plan(fixtures.length)
-
   while (++index < fixtures.length) {
-    one(fixtures[index])
-  }
-
-  function one(name) {
-    var config
-    var output
+    const name = fixtures[index]
+    let config
+    let output
 
     try {
       config = JSON.parse(fs.readFileSync(path.join(root, name, 'config.json')))
     } catch (_) {
       try {
-        config = require(path.join(root, name, 'config.js'))
+        config = (
+          await import(
+            new URL(
+              path.join('.', 'fixtures', name, 'config.js'),
+              import.meta.url
+            )
+          )
+        ).default
       } catch (_) {}
     }
 
@@ -63,31 +63,30 @@ test('Fixtures', function (t) {
       output = ''
     }
 
-    remark()
-      .use(license, config)
-      .process(
-        {
+    try {
+      const file = await remark()
+        .use(license, config)
+        .process({
           contents: fs.readFileSync(path.join(root, name, 'readme.md')),
           cwd: path.join(root, name),
           path: 'readme.md'
-        },
-        function (error, file) {
-          var expression
+        })
 
-          if (name.indexOf('fail-') === 0) {
-            expression = new RegExp(name.slice(5).replace(/-/g, ' '), 'i')
+      t.equal(String(file), output, 'should work on `' + name + '`')
+    } catch (error) {
+      if (name.indexOf('fail-') === 0) {
+        const expression = new RegExp(name.slice(5).replace(/-/g, ' '), 'i')
 
-            t.equal(
-              expression.test(String(error).replace(/`/g, '')),
-              true,
-              'should fail on `' + name + '` matching `' + expression + '`'
-            )
-          } else if (error) {
-            throw error
-          } else {
-            t.equal(String(file), output, 'should work on `' + name + '`')
-          }
-        }
-      )
+        t.equal(
+          expression.test(String(error).replace(/`/g, '')),
+          true,
+          'should fail on `' + name + '` matching `' + expression + '`'
+        )
+      } else {
+        t.ifError(error, name)
+      }
+    }
   }
+
+  t.end()
 })

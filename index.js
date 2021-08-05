@@ -1,19 +1,8 @@
-'use strict'
-
-var parse = require('parse-author')
-var spdx = require('spdx-license-list')
-var heading = require('mdast-util-heading-range')
-
-module.exports = license
-
-var fs
-var path
-
-/* c8 ignore next 4 */
-try {
-  fs = require('fs')
-  path = require('path')
-} catch (_) {}
+import fs from 'fs'
+import path from 'path'
+import parse from 'parse-author'
+import spdx from 'spdx-license-list'
+import heading from 'mdast-util-heading-range'
 
 var licenseRegexp = /^licen[cs]e(?=$|\.)/i
 var licenseHeadingRegexp = /^licen[cs]e$/i
@@ -21,7 +10,7 @@ var http = 'http://'
 var https = 'https://'
 
 /* Add a license section. */
-function license(options) {
+export default function remarkLicense(options) {
   var settings = options || {}
   var finals = settings.ignoreFinalDefinitions
   var test = settings.heading || licenseHeadingRegexp
