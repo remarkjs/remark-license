@@ -9,6 +9,7 @@ module.exports = license
 var fs
 var path
 
+/* c8 ignore next 4 */
 try {
   fs = require('fs')
   path = require('path')
@@ -66,7 +67,8 @@ function license(options) {
         }
       }
 
-      /* istanbul ignore if - hard to test. */
+      // Hard to test.
+      /* c8 ignore next 3 */
       if (error && error.code !== 'ENOENT') {
         one(error)
       } else {
@@ -84,7 +86,8 @@ function license(options) {
       var length
       var index
 
-      /* istanbul ignore if - hard to test. */
+      // Hard to test.
+      /* c8 ignore next 3 */
       if (error) {
         one(error)
       } else {
