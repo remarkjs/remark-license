@@ -1,9 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import test from 'tape'
-import remark from 'remark'
-import hidden from 'is-hidden'
-import negate from 'negate'
+import {remark} from 'remark'
+import {isHidden} from 'is-hidden'
 import license from '../index.js'
 
 var root = path.join('test', 'fixtures')
@@ -34,13 +33,15 @@ test('current working directory', function (t) {
 })
 
 test('Fixtures', async function (t) {
-  var fixtures = fs.readdirSync(root).filter(negate(hidden))
+  var fixtures = fs.readdirSync(root)
   var index = -1
 
   while (++index < fixtures.length) {
     const name = fixtures[index]
     let config
     let output
+
+    if (isHidden(name)) continue
 
     try {
       config = JSON.parse(fs.readFileSync(path.join(root, name, 'config.json')))
@@ -67,7 +68,7 @@ test('Fixtures', async function (t) {
       const file = await remark()
         .use(license, config)
         .process({
-          contents: fs.readFileSync(path.join(root, name, 'readme.md')),
+          value: fs.readFileSync(path.join(root, name, 'readme.md')),
           cwd: path.join(root, name),
           path: 'readme.md'
         })

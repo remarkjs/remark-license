@@ -128,7 +128,7 @@ remark()
   .process(
     {
       cwd: path.join('.', 'some', 'path', 'to', 'a', 'directory'),
-      contents: fs.readFileSync('example.md')
+      value: fs.readFileSync('example.md')
     },
     function(err, file) {
       if (err) throw err
