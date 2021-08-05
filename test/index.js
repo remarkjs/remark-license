@@ -5,36 +5,23 @@ import {remark} from 'remark'
 import {isHidden} from 'is-hidden'
 import license from '../index.js'
 
-var root = path.join('test', 'fixtures')
+const root = path.join('test', 'fixtures')
 
 fs.writeFileSync(
   path.join(root, 'fail-unexpected-end-of-json', 'package.json'),
   '{\n'
 )
 
+fs.renameSync('package.json', 'package.json.bak')
+
 process.on('exit', () => {
   fs.unlinkSync(path.join(root, 'fail-unexpected-end-of-json', 'package.json'))
+  fs.renameSync('package.json.bak', 'package.json')
 })
 
-test('current working directory', function (t) {
-  t.plan(1)
-
-  remark()
-    .use(license)
-    .process('# License', function (error, file) {
-      t.deepEqual(
-        [error, String(file)],
-        [
-          null,
-          '# License\n\n[MIT](license) © [Titus Wormer](https://wooorm.com)\n'
-        ]
-      )
-    })
-})
-
-test('Fixtures', async function (t) {
-  var fixtures = fs.readdirSync(root)
-  var index = -1
+test('Fixtures', async (t) => {
+  const fixtures = fs.readdirSync(root)
+  let index = -1
 
   while (++index < fixtures.length) {
     const name = fixtures[index]
@@ -45,7 +32,7 @@ test('Fixtures', async function (t) {
 
     try {
       config = JSON.parse(fs.readFileSync(path.join(root, name, 'config.json')))
-    } catch (_) {
+    } catch {
       try {
         config = (
           await import(
@@ -55,12 +42,12 @@ test('Fixtures', async function (t) {
             )
           )
         ).default
-      } catch (_) {}
+      } catch {}
     }
 
     try {
       output = String(fs.readFileSync(path.join(root, name, 'output.md')))
-    } catch (_) {
+    } catch {
       output = ''
     }
 
