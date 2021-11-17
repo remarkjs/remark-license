@@ -1,5 +1,5 @@
 {
-  "include": ["test/**/*.js", "*.js"],
+  "include": ["lib/**/*.js", "test/**/*.js", "*.js"],
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["ES2020"],
