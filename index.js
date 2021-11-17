@@ -94,7 +94,9 @@ export default function remarkLicense(options = {}) {
 
     if (!options.file) {
       const files = await fs.readdir(
-        (packageFile && path.resolve(packageFile.cwd, packageFile.dirname)) ||
+        (packageFile &&
+          packageFile.dirname &&
+          path.resolve(packageFile.cwd, packageFile.dirname)) ||
           file.cwd
       )
       let index = -1
