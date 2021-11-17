@@ -32,6 +32,10 @@
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
+  "browser": {
+    "./lib/find-license.js": "./lib/find-license.browser.js",
+    "./lib/find-nearest-package.js": "./lib/find-nearest-package.browser.js"
+  },
   "files": [
     "lib/",
     "index.d.ts",
