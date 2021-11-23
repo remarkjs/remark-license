@@ -8,59 +8,119 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[**remark**][remark] plugin to add a [license][section] section to your readme.
+**[remark][]** plugin to generate a license section.
 
-## Note!
+## Contents
 
-This plugin is ready for the new parser in remark
-([`remarkjs/remark#536`](https://github.com/remarkjs/remark/pull/536)).
-No change is needed: it works exactly the same now as it did before!
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`unified().use(remarkLicense[, options])`](#unifieduseremarklicense-options)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Security](#security)
+*   [Related](#related)
+*   [Contribute](#contribute)
+*   [License](#license)
+
+## What is this?
+
+This package is a [unified][] ([remark][]) plugin to generate a license section
+such as the one below.
+
+**unified** is a project that transforms content with abstract syntax trees
+(ASTs).
+**remark** adds support for markdown to unified.
+**mdast** is the markdown AST that remark uses.
+This is a remark plugin that transforms mdast.
+
+## When should I use this?
+
+This project is useful when you’re writing documentation for an open source
+project, typically a Node.js package, that has one or more readmes and maybe
+some other markdown files as well.
+You want to show the author and license associated with the project.
+When this plugin is used, authors can add a certain heading (say, `## License`)
+to documents and this plugin will populate them.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
-Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
-
-[npm][]:
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
 
 ```sh
 npm install remark-license
 ```
 
-## Use
-
-Say we have the following file, `example.md`:
-
-```markdown
-## License
-
-Something nondescript.
-```
-
-And our module, `example.js`, looks as follows:
+In Deno with [Skypack][]:
 
 ```js
-import fs from 'node:fs'
+import remarkLicense from 'https://cdn.skypack.dev/remark-license@6?dts'
+```
+
+In browsers with [Skypack][]:
+
+```html
+<script type="module">
+  import remarkLicense from 'https://cdn.skypack.dev/remark-license@6?min'
+</script>
+```
+
+## Use
+
+Say we have the following file `example.md` in this project:
+
+```markdown
+# Example
+
+Some text.
+
+## Use
+
+## API
+
+## License
+```
+
+And our module `example.js` looks as follows:
+
+```js
+import {read} from 'to-vfile'
 import {remark} from 'remark'
 import remarkLicense from 'remark-license'
 
-const buf = fs.readFileSync('example.md')
+main()
 
-remark()
-  .use(remarkLicense)
-  .process(buf)
-  .then((file) => {
-    console.log(String(file))
-  })
+async function main() {
+  const file = await remark()
+    .use(remarkLicense)
+    .process(await read('example.md'))
+
+  console.log(String(file))
+}
 ```
 
-Now, running `node example` yields:
+Now running `node example.js` yields:
 
 ```markdown
+# Example
+
+Some text.
+
+## Use
+
+## API
+
 ## License
 
-[MIT](LICENSE) © [Titus Wormer](https://wooorm.com)
+[MIT](license) © [Titus Wormer](https://wooorm.com)
 ```
+
+> 👉 **Note**: This info is inferred from this project’s
+> [`package.json`][package-json] and [`license`][license] file.
+> Running this example in a different package will yield different results.
 
 ## API
 
@@ -69,81 +129,66 @@ The default export is `remarkLicense`.
 
 ### `unified().use(remarkLicense[, options])`
 
-Plugin to add a license section to your readme.
-Adds content to the heading matching `/^licen[cs]e$/i` or `options.heading`.
-Replaces the original content of that section.
-Does nothing when no heading is found.
-Does nothing when the processed file is the license file (such for a license
-heading in `license.md`).
+Generate a license section.
+In short, this plugin:
+
+*   looks for the heading matching `/^licen[cs]e$/i` or `options.heading`.
+*   if there is a heading, replaces it with a new section
 
 ##### `options`
 
+Configuration (optional in Node.js, required in browsers).
+
 ###### `options.name`
 
-License holder (`string`, optional).
-[Detected][] from the `package.json` in the current working directory,
-supporting both [`object` and `string`][author-format] format of `author`.
+License holder (`string`).
+In Node.js, defaults to the `author` field in the closest `package.json`.
 *Throws when neither given nor detected.*
 
 ###### `options.license`
 
-[SPDX][] identifier (`string`, optional).
-[Detected][] from the `license` field in the `package.json` in the current
-working directory.
-Deprecated license objects are not supported.
+[SPDX][] identifier (`string`).
+In Node.js, defaults to the `license` field in the closest `package.json`.
 *Throws when neither given nor detected.*
 
 ###### `options.file`
 
 File name of license file (`string`, optional).
-[Detected][] from the files in the current working directory, in which case the
-first file matching `/^licen[cs]e(?=$|\.)/i` is used.
+In Node.js, defaults to a file in the directory of the closest `package.json`
+that matches `/^licen[cs]e(?=$|\.)/i`.
 If there is no given or found license file, but `options.license` is a known
-[SPDX identifier][spdx], the URL to the license on `spdx.org` is used.
+[SPDX][] identifier, then the URL to the license on `spdx.org` is used.
 
 ###### `options.url`
 
 URL to license holder (`string`, optional).
-[Detected][] from the `package.json` in the current working directory,
-supporting both [`object` and `string`][author-format] format of `author`.
-`http://` is prepended if `url` starts without HTTP or HTTPS protocol.
+In Node.js, defaults to the `author` field in the closest `package.json`.
+`http://` is prepended if `url` does not start with an HTTP or HTTPS protocol.
 
 ###### `options.ignoreFinalDefinitions`
 
-Ignore final definitions otherwise in the section (`boolean`, default: true).
+Ignore definitions that would otherwise trail in the section (`boolean`,
+default: `true`).
 
 ###### `options.heading`
 
-Heading to look for (`string` (case-insensitive) or `RegExp`, default:
+Heading to look for (`string` (case insensitive) or `RegExp`, default:
 `/^licen[cs]e$/i`).
 
-## Detection
+## Types
 
-Detection of `package.json` and files in the current working directory is
-based on the current working directory as set on the given [`vfile`][vfile].
+This package is fully typed with [TypeScript][].
+It exports an `Options` type, which specifies the interface of the accepted
+options.
 
-If you want to set the cwd yourself (the default is `process.cwd()`), you can
-pass in a `vfile` or [`vfile` options][vfile-options] to `.process` like so:
+## Compatibility
 
-```js
-var fs = require('fs')
-var path = require('path')
-var remark = require('remark')
-var license = require('remark-license')
+Projects maintained by the unified collective are compatible with all maintained
+versions of Node.js.
+As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
+Our projects sometimes work with older versions, but this is not guaranteed.
 
-remark()
-  .use(license)
-  .process(
-    {
-      cwd: path.join('.', 'some', 'path', 'to', 'a', 'directory'),
-      value: fs.readFileSync('example.md')
-    },
-    function(err, file) {
-      if (err) throw err
-      console.log(String(file))
-    }
-  )
-```
+This plugin works with `unified` version 6+ and `remark` version 7+.
 
 ## Security
 
@@ -152,19 +197,19 @@ tree when it’s given or found.
 This could open you up to a [cross-site scripting (XSS)][xss] attack if you pass
 user provided content in or store user provided content in `package.json`.
 
-This may become a problem if the Markdown later transformed to
-[**rehype**][rehype] ([**hast**][hast]) or opened in an unsafe Markdown viewer.
+This may become a problem if the markdown is later transformed to **[rehype][]**
+(**[hast][]**) or opened in an unsafe markdown viewer.
 
 ## Related
 
 *   [`remark-collapse`](https://github.com/Rokt33r/remark-collapse)
-    — Make a section collapsible
+    – make some sections collapsible
 *   [`remark-contributors`](https://github.com/hughsk/remark-contributors)
-    — Add a list of contributors
+    – generate a contributors section
 *   [`remark-toc`](https://github.com/remarkjs/remark-toc)
-    — Add a table of contents
+    — generate a table of contents
 *   [`remark-usage`](https://github.com/remarkjs/remark-usage)
-    — Add a usage example
+    — generate a usage example
 
 ## Contribute
 
@@ -210,6 +255,8 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[skypack]: https://www.skypack.dev
+
 [health]: https://github.com/remarkjs/.github
 
 [contributing]: https://github.com/remarkjs/.github/blob/HEAD/contributing.md
@@ -224,20 +271,16 @@ abide by its terms.
 
 [remark]: https://github.com/remarkjs/remark
 
-[author-format]: https://docs.npmjs.com/files/package.json#people-fields-author-contributors
+[unified]: https://github.com/unifiedjs/unified
 
 [spdx]: https://spdx.org/licenses/
 
-[vfile]: https://github.com/vfile/vfile
-
-[vfile-options]: https://github.com/vfile/vfile#vfileoptions
-
-[section]: #license
-
-[detected]: #detection
-
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[typescript]: https://www.typescriptlang.org
 
 [rehype]: https://github.com/rehypejs/rehype
 
 [hast]: https://github.com/syntax-tree/hast
+
+[package-json]: package.json
