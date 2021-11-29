@@ -44,16 +44,15 @@ test('Fixtures', async (t) => {
       )
     } catch {
       try {
-        config = (
-          await import(
-            String(
-              new URL(
-                path.join('.', 'fixtures', name, 'config.js'),
-                import.meta.url
-              )
+        const configMod = await import(
+          String(
+            new URL(
+              path.join('.', 'fixtures', name, 'config.js'),
+              import.meta.url
             )
           )
-        ).default
+        )
+        config = configMod.default
       } catch {}
     }
 
