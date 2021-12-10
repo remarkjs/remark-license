@@ -27,8 +27,11 @@
 
 ## What is this?
 
-This package is a [unified][] ([remark][]) plugin to generate a license section
-such as the one below.
+This package is a [unified][] ([remark][]) plugin to fill in a license section
+such as [the one](#license) at the end of this README.
+It requires the section heading to be present in the source,
+and the `author` and `license` fields to either be set in a `package.json` file,
+or be passed as parameters.
 
 **unified** is a project that transforms content with abstract syntax trees
 (ASTs).
