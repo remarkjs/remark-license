@@ -29,9 +29,6 @@
 
 This package is a [unified][] ([remark][]) plugin to fill in a license section
 such as [the one](#license) at the end of this README.
-It requires the section heading to be present in the source,
-and the `author` and `license` fields to either be set in a `package.json` file,
-or be passed as parameters.
 
 **unified** is a project that transforms content with abstract syntax trees
 (ASTs).
@@ -45,8 +42,12 @@ This project is useful when you’re writing documentation for an open source
 project, typically a Node.js package, that has one or more readmes and maybe
 some other markdown files as well.
 You want to show the author and license associated with the project.
+
 When this plugin is used, authors can add a certain heading (say, `## License`)
-to documents and this plugin will populate them.
+to documents and this plugin will populate that section with the information,
+using either the `author` and `license` fields set in a `package.json` file,
+or parameters with the same name passed to the plugin.
+
 
 ## Install
 
