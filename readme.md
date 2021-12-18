@@ -48,7 +48,6 @@ to documents and this plugin will populate that section with the information,
 using either the `author` and `license` fields set in a `package.json` file,
 or parameters with the same name passed to the plugin.
 
-
 ## Install
 
 This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
