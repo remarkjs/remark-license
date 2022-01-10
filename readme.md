@@ -28,7 +28,7 @@
 ## What is this?
 
 This package is a [unified][] ([remark][]) plugin to generate a license section
-such as the one below.
+such as [the one at the bottom of this readme][license-section].
 
 **unified** is a project that transforms content with abstract syntax trees
 (ASTs).
@@ -284,3 +284,5 @@ abide by its terms.
 [hast]: https://github.com/syntax-tree/hast
 
 [package-json]: package.json
+
+[license-section]: #license
