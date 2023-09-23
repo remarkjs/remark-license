@@ -81,7 +81,8 @@
   },
   "remarkConfig": {
     "plugins": [
-      "remark-preset-wooorm"
+      "remark-preset-wooorm",
+      "./index.js"
     ]
   },
   "typeCoverage": {

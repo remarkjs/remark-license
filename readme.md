@@ -18,6 +18,7 @@
 *   [Use](#use)
 *   [API](#api)
     *   [`unified().use(remarkLicense[, options])`](#unifieduseremarklicense-options)
+    *   [`Options`](#options)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
 *   [Security](#security)
@@ -30,12 +31,6 @@
 This package is a [unified][] ([remark][]) plugin to generate a license section
 such as [the one at the bottom of this readme][license-section].
 
-**unified** is a project that transforms content with abstract syntax trees
-(ASTs).
-**remark** adds support for markdown to unified.
-**mdast** is the markdown AST that remark uses.
-This is a remark plugin that transforms mdast.
-
 ## When should I use this?
 
 This project is useful when you’re writing documentation for an open source
@@ -47,8 +42,8 @@ to documents and this plugin will populate them.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
-In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
+This package is [ESM only][esm].
+In Node.js (version 16+), install with [npm][]:
 
 ```sh
 npm install remark-license
@@ -84,22 +79,18 @@ Some text.
 ## License
 ```
 
-And our module `example.js` looks as follows:
+…and a module `example.js`:
 
 ```js
-import {read} from 'to-vfile'
 import {remark} from 'remark'
 import remarkLicense from 'remark-license'
+import {read} from 'to-vfile'
 
-main()
+const file = await remark()
+  .use(remarkLicense)
+  .process(await read('example.md'))
 
-async function main() {
-  const file = await remark()
-    .use(remarkLicense)
-    .process(await read('example.md'))
-
-  console.log(String(file))
-}
+console.log(String(file))
 ```
 
 Now running `node example.js` yields:
@@ -119,74 +110,72 @@ Some text.
 ```
 
 > 👉 **Note**: This info is inferred from this project’s
-> [`package.json`][package-json] and [`license`][license] file.
+> [`package.json`][file-package-json] and [`license`][file-license] file.
 > Running this example in a different package will yield different results.
 
 ## API
 
 This package exports no identifiers.
-The default export is `remarkLicense`.
+The default export is [`remarkLicense`][api-remark-license].
 
 ### `unified().use(remarkLicense[, options])`
 
 Generate a license section.
-In short, this plugin:
 
-*   looks for the heading matching `/^licen[cs]e$/i` or `options.heading`.
-*   if there is a heading, replaces it with a new section
+###### Parameters
 
-##### `options`
+*   `options` ([`Options`][api-options], optional)
+    — configuration
 
-Configuration (optional in Node.js, required in browsers).
+###### Returns
 
-###### `options.name`
+Transform ([`Transformer`][unified-transformer]).
 
-License holder (`string`).
-In Node.js, defaults to the `author` field in the closest `package.json`.
-*Throws when neither given nor detected.*
+### `Options`
 
-###### `options.license`
+Configuration (TypeScript type).
 
-[SPDX][] identifier (`string`).
-In Node.js, defaults to the `license` field in the closest `package.json`.
-*Throws when neither given nor detected.*
+###### Fields
 
-###### `options.file`
-
-File name of license file (`string`, optional).
-In Node.js, defaults to a file in the directory of the closest `package.json`
-that matches `/^licen[cs]e(?=$|\.)/i`.
-If there is no given or found license file, but `options.license` is a known
-[SPDX][] identifier, then the URL to the license on `spdx.org` is used.
-
-###### `options.url`
-
-URL to license holder (`string`, optional).
-In Node.js, defaults to the `author` field in the closest `package.json`.
-`http://` is prepended if `url` does not start with an HTTP or HTTPS protocol.
-
-###### `options.ignoreFinalDefinitions`
-
-Ignore definitions that would otherwise trail in the section (`boolean`,
-default: `true`).
-
-###### `options.heading`
-
-Heading to look for (`string` (case insensitive) or `RegExp`, default:
-`/^licen[cs]e$/i`).
+*   `ignoreFinalDefinitions` (`boolean`, default: `true`)
+    — ignore definitions at the end of the license section
+*   `file` (`string`, optional)
+    — path to license file;
+    detected from the files in the directory of the `package.json` if there is
+    one, or the current working directory, in which case the first file
+    matching `/^licen[cs]e(?=$|\.)/i` is used;
+    if there is no given or found license file, but `options.license` is a
+    known [SPDX][] identifier, the URL to the license on `spdx.org` is used
+*   `heading` (`RegExp | string`, default: `/^licen[cs]e$/i`)
+    — heading to look for
+*   `license` (`string`, optional, example: `'mit'`)
+    — [SPDX][] identifier;
+    detected from the `license` field in the `package.json` in the current
+    working directory;
+    throws when neither given nor detected
+*   `name` (`string`, optional)
+    — license holder;
+    detected from the `package.json` closest to the file supporting both
+    `object` and `string` format of `author`;
+    throws when neither given nor detected
+*   `url` (`string`, optional)
+    — URL to license holder;
+    detected from the `package.json` in the current working directory
 
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports an `Options` type, which specifies the interface of the accepted
-options.
+It exports the additional type [`Options`][api-options].
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
+Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
-As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
-Our projects sometimes work with older versions, but this is not guaranteed.
+
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line, `remark-license@^6`,
+compatible with Node.js 12.
 
 This plugin works with `unified` version 6+ and `remark` version 7+.
 
@@ -194,8 +183,9 @@ This plugin works with `unified` version 6+ and `remark` version 7+.
 
 `options.url` (or `author.url` in `package.json`) is used and injected into the
 tree when it’s given or found.
-This could open you up to a [cross-site scripting (XSS)][xss] attack if you pass
-user provided content in or store user provided content in `package.json`.
+This could open you up to a [cross-site scripting (XSS)][wiki-xss] attack if
+you pass user provided content in or store user provided content in
+`package.json`.
 
 This may become a problem if the markdown is later transformed to **[rehype][]**
 (**[hast][]**) or opened in an unsafe markdown viewer.
@@ -223,9 +213,7 @@ abide by its terms.
 
 ## License
 
-[MIT][license] © [Titus Wormer][author]
-
-<!-- Definitions -->
+[MIT](license) © [Titus Wormer](https://wooorm.com)
 
 [build-badge]: https://github.com/remarkjs/remark-license/workflows/main/badge.svg
 
@@ -239,9 +227,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/remark-license
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/remark-license.svg
+[size-badge]: https://img.shields.io/bundlejs/size/remark-license
 
-[size]: https://bundlephobia.com/result?p=remark-license
+[size]: https://bundlejs.com/?q=remark-license
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -255,34 +243,40 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
 [esmsh]: https://esm.sh
 
 [health]: https://github.com/remarkjs/.github
 
-[contributing]: https://github.com/remarkjs/.github/blob/HEAD/contributing.md
+[contributing]: https://github.com/remarkjs/.github/blob/main/contributing.md
 
-[support]: https://github.com/remarkjs/.github/blob/HEAD/support.md
+[support]: https://github.com/remarkjs/.github/blob/main/support.md
 
-[coc]: https://github.com/remarkjs/.github/blob/HEAD/code-of-conduct.md
-
-[license]: license
-
-[author]: https://wooorm.com
-
-[remark]: https://github.com/remarkjs/remark
-
-[unified]: https://github.com/unifiedjs/unified
-
-[spdx]: https://spdx.org/licenses/
-
-[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
-
-[typescript]: https://www.typescriptlang.org
-
-[rehype]: https://github.com/rehypejs/rehype
+[coc]: https://github.com/remarkjs/.github/blob/main/code-of-conduct.md
 
 [hast]: https://github.com/syntax-tree/hast
 
-[package-json]: package.json
+[rehype]: https://github.com/rehypejs/rehype
+
+[remark]: https://github.com/remarkjs/remark
+
+[spdx]: https://spdx.org/licenses/
+
+[typescript]: https://www.typescriptlang.org
+
+[unified]: https://github.com/unifiedjs/unified
+
+[unified-transformer]: https://github.com/unifiedjs/unified#transformer
+
+[wiki-xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[file-package-json]: package.json
+
+[file-license]: license
 
 [license-section]: #license
+
+[api-options]: #options
+
+[api-remark-license]: #unifieduseremarklicense-options
