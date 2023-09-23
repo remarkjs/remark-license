@@ -2,81 +2,81 @@
  * @typedef {import('../index.js').Options} Options
  */
 
-import fs from 'node:fs'
-import path from 'node:path'
-import {URL} from 'node:url'
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
 import process from 'node:process'
-import test from 'tape'
+import test from 'node:test'
+import {fileURLToPath} from 'node:url'
 import {remark} from 'remark'
 import semver from 'semver'
-import {isHidden} from 'is-hidden'
 import license from '../index.js'
 
-const root = path.join('test', 'fixtures')
+test('fixtures', async function (t) {
+  // Prepapre.
+  const root = new URL('fixtures/', import.meta.url)
+  const packageUrl = new URL('../package.json', import.meta.url)
+  const packageBackUrl = new URL('../package.json.bak', import.meta.url)
+  const brokenPackageUrl = new URL(
+    'fail-unexpected-end-of-json/package.json',
+    root
+  )
 
-fs.writeFileSync(
-  path.join(root, 'fail-unexpected-end-of-json', 'package.json'),
-  '{\n'
-)
+  await fs.writeFile(brokenPackageUrl, '{\n')
+  await fs.rename(packageUrl, packageBackUrl)
 
-fs.renameSync('package.json', 'package.json.bak')
-
-process.on('exit', () => {
-  fs.unlinkSync(path.join(root, 'fail-unexpected-end-of-json', 'package.json'))
-  fs.renameSync('package.json.bak', 'package.json')
-})
-
-test('Fixtures', async (t) => {
-  const fixtures = fs.readdirSync(root)
+  // Test.
+  const fixtures = await fs.readdir(root)
   let index = -1
 
   while (++index < fixtures.length) {
-    const name = fixtures[index]
-    /** @type {Options|undefined} */
-    let config
-    /** @type {string} */
-    let output
+    const folder = fixtures[index]
 
-    if (isHidden(name)) continue
+    if (folder.startsWith('.')) continue
 
-    try {
-      config = JSON.parse(
-        String(fs.readFileSync(path.join(root, name, 'config.json')))
-      )
-    } catch {
+    await t.test(folder, async function () {
+      const folderUrl = new URL(folder + '/', root)
+      const inputUrl = new URL('readme.md', folderUrl)
+      const outputUrl = new URL('output.md', folderUrl)
+      const configUrl = new URL('config.json', folderUrl)
+      const configJsUrl = new URL('config.js', folderUrl)
+
+      /** @type {Options | undefined} */
+      let config
+      /** @type {string} */
+      let output
+
       try {
-        const configMod = await import(
-          String(
-            new URL(
-              path.join('.', 'fixtures', name, 'config.js'),
-              import.meta.url
-            )
-          )
-        )
-        config = configMod.default
-      } catch {}
-    }
+        config = JSON.parse(String(await fs.readFile(configUrl)))
+      } catch {
+        try {
+          const configMod = await import(String(configJsUrl))
+          config = configMod.default
+        } catch {}
+      }
 
-    try {
-      output = String(fs.readFileSync(path.join(root, name, 'output.md')))
-    } catch {
-      output = ''
-    }
+      try {
+        output = String(await fs.readFile(outputUrl))
+      } catch {
+        output = ''
+      }
 
-    try {
-      const file = await remark()
-        // @ts-expect-error: to do: remove after update.
-        .use(license, config)
-        .process({
-          value: fs.readFileSync(path.join(root, name, 'readme.md')),
-          cwd: path.join(root, name),
-          path: 'readme.md'
-        })
+      try {
+        const file = await remark()
+          // @ts-expect-error: to do: remove after update.
+          .use(license, config)
+          .process({
+            value: await fs.readFile(inputUrl),
+            cwd: fileURLToPath(folderUrl),
+            path: 'readme.md'
+          })
 
-      t.equal(String(file), output, 'should work on `' + name + '`')
-    } catch (error) {
-      if (name.indexOf('fail-') === 0) {
-        let message = name.slice(5).replace(/-/g, ' ')
+        assert.equal(String(file), output)
+      } catch (error) {
+        if (folder.indexOf('fail-') !== 0) {
+          throw error
+        }
+
+        let message = folder.slice(5).replace(/-/g, ' ')
 
         // Node 20 has a different error message.
         if (
@@ -86,18 +86,12 @@ test('Fixtures', async (t) => {
           message = 'expected property name or'
         }
 
-        const expression = new RegExp(message, 'i')
-
-        t.equal(
-          expression.test(String(error).replace(/`/g, '')),
-          true,
-          'should fail on `' + name + '` matching `' + expression + '`'
-        )
-      } else {
-        t.ifError(error, name)
+        assert.match(String(error).replace(/`/g, ''), new RegExp(message, 'i'))
       }
-    }
+    })
   }
 
-  t.end()
+  // Clean.
+  await fs.unlink(brokenPackageUrl)
+  await fs.rename(packageBackUrl, packageUrl)
 })
