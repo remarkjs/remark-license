@@ -11,6 +11,14 @@ import {remark} from 'remark'
 import semver from 'semver'
 import license from '../index.js'
 
+test('remark-license', async function (t) {
+  await t.test('should expose the public api', async function () {
+    assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
+      'default'
+    ])
+  })
+})
+
 test('fixtures', async function (t) {
   // Prepapre.
   const root = new URL('fixtures/', import.meta.url)
@@ -62,7 +70,6 @@ test('fixtures', async function (t) {
 
       try {
         const file = await remark()
-          // @ts-expect-error: to do: remove after update.
           .use(license, config)
           .process({
             value: await fs.readFile(inputUrl),

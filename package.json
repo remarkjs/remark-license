@@ -46,8 +46,7 @@
     "mdast-util-heading-range": "^4.0.0",
     "parse-author": "^2.0.0",
     "spdx-license-list": "^6.0.0",
-    "to-vfile": "^8.0.0",
-    "unified": "^11.0.0",
+    "vfile": "^6.0.0",
     "vfile-find-up": "^7.0.0"
   },
   "devDependencies": {
