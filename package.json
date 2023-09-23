@@ -30,11 +30,16 @@
   ],
   "sideEffects": false,
   "type": "module",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "browser": {
-    "./lib/find-license.js": "./lib/find-license.browser.js",
-    "./lib/find-nearest-package.js": "./lib/find-nearest-package.browser.js"
+  "exports": "./index.js",
+  "imports": {
+    "#find-license": {
+      "node": "./lib/find-license.node.js",
+      "default": "./lib/find-license.default.js"
+    },
+    "#find-nearest-package": {
+      "node": "./lib/find-nearest-package.node.js",
+      "default": "./lib/find-nearest-package.default.js"
+    }
   },
   "files": [
     "lib/",

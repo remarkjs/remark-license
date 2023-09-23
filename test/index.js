@@ -1,5 +1,5 @@
 /**
- * @typedef {import('../index.js').Options} Options
+ * @typedef {import('remark-license').Options} Options
  */
 
 import assert from 'node:assert/strict'
@@ -8,12 +8,12 @@ import process from 'node:process'
 import test from 'node:test'
 import {fileURLToPath} from 'node:url'
 import {remark} from 'remark'
+import license from 'remark-license'
 import semver from 'semver'
-import license from '../index.js'
 
 test('remark-license', async function (t) {
   await t.test('should expose the public api', async function () {
-    assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
+    assert.deepEqual(Object.keys(await import('remark-license')).sort(), [
       'default'
     ])
   })
