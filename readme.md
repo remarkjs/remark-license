@@ -52,14 +52,14 @@ npm install remark-license
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import remarkLicense from 'https://esm.sh/remark-license@6'
+import remarkLicense from 'https://esm.sh/remark-license@7'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import remarkLicense from 'https://esm.sh/remark-license@6?bundle'
+  import remarkLicense from 'https://esm.sh/remark-license@7?bundle'
 </script>
 ```
 
