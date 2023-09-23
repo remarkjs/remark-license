@@ -8,6 +8,7 @@ import {URL} from 'node:url'
 import process from 'node:process'
 import test from 'tape'
 import {remark} from 'remark'
+import semver from 'semver'
 import {isHidden} from 'is-hidden'
 import license from '../index.js'
 
@@ -75,7 +76,17 @@ test('Fixtures', async (t) => {
       t.equal(String(file), output, 'should work on `' + name + '`')
     } catch (error) {
       if (name.indexOf('fail-') === 0) {
-        const expression = new RegExp(name.slice(5).replace(/-/g, ' '), 'i')
+        let message = name.slice(5).replace(/-/g, ' ')
+
+        // Node 20 has a different error message.
+        if (
+          message === 'unexpected end of json' &&
+          semver.satisfies(process.version, '>=20')
+        ) {
+          message = 'expected property name or'
+        }
+
+        const expression = new RegExp(message, 'i')
 
         t.equal(
           expression.test(String(error).replace(/`/g, '')),
