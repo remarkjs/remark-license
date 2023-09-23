@@ -64,6 +64,7 @@ test('Fixtures', async (t) => {
 
     try {
       const file = await remark()
+        // @ts-expect-error: to do: remove after update.
         .use(license, config)
         .process({
           value: fs.readFileSync(path.join(root, name, 'readme.md')),
